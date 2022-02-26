@@ -1,11 +1,11 @@
-import {Button, message, Divider} from 'antd';
+import {message, Divider} from 'antd';
 import React, { useState, useRef } from 'react';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
+import { PageContainer} from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import {deleteConfirm} from "@/components/ConfirmModel";
-import { Instance } from './data';
+import {confirmModal} from "@/components/ConfirmModel";
+import type { Instance } from './data';
 import { fetchInstancePage, updateInstance, offline, online } from './service';
 
 /**
@@ -18,7 +18,6 @@ const handleUpdate = async (fields: Partial<Instance>) => {
   try {
     await updateInstance(fields);
     hide();
-
     message.success('配置成功');
     return true;
   } catch (error) {
@@ -29,21 +28,37 @@ const handleUpdate = async (fields: Partial<Instance>) => {
 };
 
 /**
- * 删除节点
- *
- * @param selectedRows
+ * 实例下线
  */
-const handleRemove = async (selectedRows: any[]) => {
-  const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
+const handlerOffline = async (clientId: string) => {
+  const hide = message.loading('正在下线');
+  if (!clientId) return true;
   try {
-    //await removeServer({ids: selectedRows});
+    await offline(clientId);
     hide();
-    message.success('删除成功，即将刷新');
+    message.success('下线成功，即将刷新');
     return true;
   } catch (error) {
     hide();
-    message.error('删除失败，请重试');
+    message.error('下线失败，请重试');
+    return false;
+  }
+};
+
+/**
+ * 实例上线
+ */
+const handlerChange = async (clientId: string) => {
+  const hide = message.loading('正在上线');
+  if (!clientId) return true;
+  try {
+    await online(clientId);
+    hide();
+    message.success('上线成功，即将刷新');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('上线失败，请重试');
     return false;
   }
 };
@@ -54,8 +69,6 @@ const TableList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<Instance>();
-  const [selectedRowsState, setSelectedRows] = useState<Instance[]>([]);
-
   const columns: ProColumns<Instance>[] = [
     {
       title: '实例地址',
@@ -88,14 +101,16 @@ const TableList: React.FC = () => {
       render: (_, record) => (
         <>
           <a
-            onClick={() => {
+            onClick={async () => {
               if (record.status === 'OFF_LINE') {
-                online(record.clientId).then();
-              }else {
-                offline(record.clientId).then();
-              }
-              if (actionRef.current) {
-                actionRef.current.reload();
+                await handlerChange(record.clientId)
+                actionRef.current?.reloadAndRest?.();
+              } else {
+                const confirm = await confirmModal("确定要下线吗？");
+                if (confirm){
+                  await handlerOffline(record.clientId);
+                  actionRef.current?.reloadAndRest?.();
+                }
               }
             }}
           >
@@ -136,31 +151,7 @@ const TableList: React.FC = () => {
           };
         }}
         columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
-          },
-        }}
       />
-      {selectedRowsState?.length > 0 && (
-        <FooterToolbar
-          extra={
-            <div>
-              已选择 <a style={{ fontWeight: 600 }}>{selectedRowsState.length}</a> 项&nbsp;&nbsp;
-            </div>
-          }
-        >
-          <Button
-            onClick={async () => {
-              await handleRemove(selectedRowsState ? selectedRowsState.map((e) => e.id):[]);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量删除
-          </Button>
-        </FooterToolbar>
-      )}
       <UpdateForm
         onSubmit={async (value) => {
           const success = await handleUpdate(value);

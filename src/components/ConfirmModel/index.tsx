@@ -4,31 +4,12 @@ import React from "react";
 
 const { confirm } = Modal;
 
-export const deleteConfirm = () => {
+export const confirmModal = (title: string = 'Do you want to delete this item?') => {
   return new Promise((resolve) => {
     confirm({
-      title: 'Do you want to delete this item?',
+      title,
       icon: <ExclamationCircleOutlined />,
       // content: 'Some descriptions',
-      okText: '确认',
-      okType: 'danger',
-      cancelText: '取消',
-      onOk() {
-        resolve(true)
-      },
-      onCancel() {
-        resolve(false)
-      },
-    });
-  });
-};
-
-export const updateConfirm = () => {
-  return new Promise((resolve) => {
-    confirm({
-      title: 'Do you Want to update these items?',
-      icon: <ExclamationCircleOutlined />,
-      content: 'Some descriptions',
       okText: '确认',
       okType: 'danger',
       cancelText: '取消',

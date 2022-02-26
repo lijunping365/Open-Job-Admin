@@ -5,7 +5,7 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import { fetchUserPage, updateUser, removeUser } from './service';
-import {deleteConfirm} from "@/components/ConfirmModel";
+import {confirmModal} from "@/components/ConfirmModel";
 import type { User } from './data';
 
 /**
@@ -107,7 +107,7 @@ const TableList: React.FC = () => {
           <Divider type="vertical" />
           <a
             onClick={async () => {
-              const confirm = await deleteConfirm();
+              const confirm = await confirmModal();
               if (confirm){
                 await handleRemove([record.id]);
                 actionRef.current?.reloadAndRest?.();
