@@ -67,9 +67,9 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         <FormItem
           name="weight"
           label="权重"
-          rules={[{ required: true, message: '请输入实例权重！' }]}
+          rules={[{ required: true, message: '请输入实例权重！', min : 1, max : 100 }]}
         >
-          <Input placeholder="请输入实例权重" min={1} max={100}/>
+          <Input placeholder="请输入实例权重" type={"number"}/>
         </FormItem>
       </Form>
     </Modal>
