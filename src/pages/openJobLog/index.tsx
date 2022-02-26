@@ -31,10 +31,8 @@ const handleRemove = async (selectedRows: any[]) => {
 };
 
 const TableList: React.FC = () => {
-
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<OpenJobLog[]>([]);
-
   const columns: ProColumns<OpenJobLog>[] = [
     {
       title: '编号',

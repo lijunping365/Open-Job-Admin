@@ -69,6 +69,46 @@ const handleRemove = async (selectedRows: any[]) => {
   }
 };
 
+/**
+ * 启动任务
+ *
+ * @param jobId
+ */
+const handleStart = async (jobId: number) => {
+  const hide = message.loading('正在启动');
+  if (!jobId) return true;
+  try {
+    await startScheduleTask(jobId);
+    hide();
+    message.success('启动成功，即将刷新');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('启动失败，请重试');
+    return false;
+  }
+};
+
+/**
+ * 停止任务
+ *
+ * @param jobId
+ */
+const handleStop = async (jobId: number) => {
+  const hide = message.loading('正在停止');
+  if (!jobId) return true;
+  try {
+    await stopScheduleTask(jobId);
+    hide();
+    message.success('停止成功，即将刷新');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('停止失败，请重试');
+    return false;
+  }
+};
+
 const TableList: React.FC = () => {
   /** 新建窗口的弹窗 */
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
@@ -132,15 +172,13 @@ const TableList: React.FC = () => {
       render: (_, record) => (
         <>
           <a
-            onClick={() => {
+            onClick={async () => {
               if (record.status === 0) {
-                startScheduleTask(record.id).then();
+                await handleStart(record.id);
               }else {
-                stopScheduleTask(record.id).then();
+                await handleStop(record.id);
               }
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
+              actionRef.current?.reloadAndRest?.();
             }}
           >
             {record.status === 0 ? '启动': '停止'}
