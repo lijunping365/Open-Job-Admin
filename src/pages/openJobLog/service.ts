@@ -13,7 +13,7 @@ export async function fetchTaskLogPage(
     status?: number
   }
 ) {
-  return request('/taskLog/page', {
+  return request('/openJobLog/page', {
     method: 'GET',
     params: {
       ...params,
@@ -22,7 +22,7 @@ export async function fetchTaskLogPage(
 }
 
 export async function removeTaskLog(params: {ids: number[]}) {
-  return request('/taskLog/delete', {
+  return request('/openJobLog/delete', {
     method: 'DELETE',
     data: {...params}
   });

@@ -1,6 +1,7 @@
-export interface ScheduleTask {
+export interface OpenJob {
   id: number;
-  spiderId: string;
+  jobName: string;
+  handlerName: string;
   cronExpression: string;
   status: number;
   createTime: Date;

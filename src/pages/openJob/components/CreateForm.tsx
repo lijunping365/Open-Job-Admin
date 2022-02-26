@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {Form, Input, Modal, Tabs, Radio, Space, Checkbox, Divider, List, Typography} from 'antd';
-import {ScheduleTask} from "@/pages/spiderTask/data";
+import type {OpenJob} from "../data";
 
 interface CreateFormProps {
   modalVisible: boolean;
   onCancel: (flag?: boolean) => void;
-  onSubmit: (values: Partial<ScheduleTask>) => void;
+  onSubmit: (values: Partial<OpenJob>) => void;
 }
 
 const FormItem = Form.Item;

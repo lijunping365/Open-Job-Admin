@@ -7,7 +7,7 @@ import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeScheduleTask, startScheduleTask, stopScheduleTask } from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
-import type {ScheduleTask} from "./data";
+import type {OpenJob} from "./data";
 import CreateForm from "./components/CreateForm";
 
 /**
@@ -15,7 +15,7 @@ import CreateForm from "./components/CreateForm";
  *
  * @param fields
  */
-const handleAdd = async (fields: ScheduleTask) => {
+const handleAdd = async (fields: OpenJob) => {
   const hide = message.loading('正在添加');
   try {
     await addScheduleTask({ ...fields });
@@ -34,7 +34,7 @@ const handleAdd = async (fields: ScheduleTask) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<ScheduleTask>) => {
+const handleUpdate = async (fields: Partial<OpenJob>) => {
   const hide = message.loading('正在配置');
   try {
     await updateScheduleTask(fields);
@@ -78,12 +78,17 @@ const TableList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
   // const [currentRow, setCurrentRow] = useState<ScheduleTask>();
-  const [selectedRowsState, setSelectedRows] = useState<ScheduleTask[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<OpenJob[]>([]);
 
-  const columns: ProColumns<ScheduleTask>[] = [
+  const columns: ProColumns<OpenJob>[] = [
     {
-      title: '爬虫ID',
-      dataIndex: 'spiderId',
+      title: '任务编号',
+      dataIndex: 'id',
+      valueType: 'text',
+    },
+    {
+      title: '任务名称',
+      dataIndex: 'jobName',
       valueType: 'text',
     },
     {
@@ -91,6 +96,11 @@ const TableList: React.FC = () => {
       dataIndex: 'cronExpression',
       valueType: 'text',
       search: false,
+    },
+    {
+      title: 'handler 名称',
+      dataIndex: 'handlerName',
+      valueType: 'text',
     },
     {
       title: '状态',
@@ -163,7 +173,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<ScheduleTask>
+      <ProTable<OpenJob>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
@@ -220,7 +230,7 @@ const TableList: React.FC = () => {
       )}
 
       <CreateForm onCancel={() => handleCreateModalVisible(false)} modalVisible={createModalVisible}>
-        <ProTable<ScheduleTask, ScheduleTask>
+        <ProTable<OpenJob, OpenJob>
           onSubmit={async (value) => {
             const success = await handleAdd(value);
             if (success) {

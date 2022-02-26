@@ -1,6 +1,6 @@
-export interface TaskLog {
+export interface OpenJobLog {
   id: number;
-  taskId: number;
+  jobId: number;
   status: number;
   createTime: Date;
 }

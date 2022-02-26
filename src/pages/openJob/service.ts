@@ -1,5 +1,5 @@
 import { request } from 'umi';
-import type {ScheduleTask} from "./data";
+import type {OpenJob} from "./data";
 
 export async function fetchScheduleTaskPage(
   params: {
@@ -14,7 +14,7 @@ export async function fetchScheduleTaskPage(
     status?: number
   }
 ) {
-  return request('/task/page', {
+  return request('/openJob/page', {
     method: 'GET',
     params: {
       ...params,
@@ -22,35 +22,35 @@ export async function fetchScheduleTaskPage(
   });
 }
 
-export async function updateScheduleTask(params: Partial<ScheduleTask>) {
-  return request('/task/update', {
+export async function updateScheduleTask(params: Partial<OpenJob>) {
+  return request('/openJob/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
-export async function addScheduleTask(params: ScheduleTask) {
-  return request('/task/save', {
+export async function addScheduleTask(params: OpenJob) {
+  return request('/openJob/save', {
     method: 'POST',
     data: {...params}
   });
 }
 
 export async function removeScheduleTask(params: {ids: number[]}) {
-  return request('/task/delete', {
+  return request('/openJob/delete', {
     method: 'DELETE',
     data: {...params}
   });
 }
 
 export async function startScheduleTask(id: number) {
-  return request(`/task/start/${id}`, {
+  return request(`/openJob/start/${id}`, {
     method: 'PUT',
   });
 }
 
 export async function stopScheduleTask(id: number) {
-  return request(`/task/stop/${id}`, {
+  return request(`/openJob/stop/${id}`, {
     method: 'PUT',
   });
 }

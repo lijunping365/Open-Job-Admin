@@ -6,7 +6,7 @@ import ProTable from '@ant-design/pro-table';
 import { fetchTaskLogPage, removeTaskLog} from './service';
 import {deleteConfirm} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
-import type {TaskLog} from "./data";
+import type {OpenJobLog} from "./data";
 
 
 
@@ -33,12 +33,17 @@ const handleRemove = async (selectedRows: any[]) => {
 const TableList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
-  const [selectedRowsState, setSelectedRows] = useState<TaskLog[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<OpenJobLog[]>([]);
 
-  const columns: ProColumns<TaskLog>[] = [
+  const columns: ProColumns<OpenJobLog>[] = [
     {
-      title: '任务ID',
-      dataIndex: 'taskId',
+      title: '编号',
+      dataIndex: 'id',
+      valueType: 'text',
+    },
+    {
+      title: '任务编号',
+      dataIndex: 'jobId',
       valueType: 'text',
     },
     {
@@ -89,7 +94,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<TaskLog>
+      <ProTable<OpenJobLog>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
