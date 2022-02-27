@@ -11,7 +11,12 @@ import {
 
 const { TabPane } = Tabs;
 
-const CronComponent: React.FC = () => {
+export interface CronProps {
+  onChange: (value: any) => void;
+}
+
+const CronComponent: React.FC<CronProps> = (props) => {
+  const { onChange } = props;
 
   // tab group
   const [secondRadioValue, setSecondRadioValue] = React.useState();
@@ -98,7 +103,8 @@ const CronComponent: React.FC = () => {
   }
 
   const setInputValue = (value: string) => {
-    console.log('onInputChange', value);
+    console.log('onInputChange1111', value);
+    onChange(value);
   }
 
   useEffect(() => {
