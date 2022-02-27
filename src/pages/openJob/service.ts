@@ -29,7 +29,7 @@ export async function updateScheduleTask(params: Partial<OpenJob>) {
   });
 }
 
-export async function addScheduleTask(params: OpenJob) {
+export async function addScheduleTask(params: Partial<OpenJob>) {
   return request('/openJob/save', {
     method: 'POST',
     data: {...params}

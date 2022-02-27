@@ -15,10 +15,10 @@ import CreateForm from "./components/CreateForm";
  *
  * @param fields
  */
-const handleAdd = async (fields: OpenJob) => {
+const handleAdd = async (fields: Partial<OpenJob>) => {
   const hide = message.loading('正在添加');
   try {
-    await addScheduleTask({ ...fields });
+    await addScheduleTask(fields);
     hide();
     message.success('添加成功');
     return true;
@@ -267,21 +267,18 @@ const TableList: React.FC = () => {
         </FooterToolbar>
       )}
 
-      <CreateForm onCancel={() => handleCreateModalVisible(false)} modalVisible={createModalVisible}>
-        <ProTable<OpenJob, OpenJob>
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-            if (success) {
-              handleCreateModalVisible(false);
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
+      <CreateForm
+        onSubmit={async (value) => {
+          const success = await handleAdd(value);
+          if (success) {
+            handleCreateModalVisible(false);
+            if (actionRef.current) {
+              actionRef.current.reload();
             }
-          }}
-          rowKey="id"
-          type="form"
-          columns={columns}
-        />
+          }
+        }}
+        onCancel={() => handleCreateModalVisible(false)}
+        modalVisible={createModalVisible}>
       </CreateForm>
       {updateFormValues && Object.keys(updateFormValues).length ? (
         <UpdateForm
