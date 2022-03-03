@@ -1,7 +1,8 @@
 import React from 'react';
-import {Form, Input, Modal} from 'antd';
-import type {OpenJob} from "../data";
-import CronComponent from "@/pages/openJob/components/CronComponent";
+import {Divider, Form, Input, List, Modal, Typography} from 'antd';
+import type { OpenJob } from "../data";
+import CronComponent from "./CronComponent";
+import { data } from './CronData';
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -18,6 +19,8 @@ const formLayout = {
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   const [form] = Form.useForm();
+  const [inputValue, setInputValue] = React.useState("* * * * * ? *");
+  const [errMsg, setErrMsg] = React.useState("");
 
   const {
     modalVisible,
@@ -32,10 +35,14 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     });
   };
 
-  const setInputValue = (value: string) => {
+  const handlerInput = (index: number,value: string) => {
     console.log('onInputChange', value);
+    const regs = inputValue.split(' ');
+    regs[index] = value;
+    const tempValue = regs.join(' ');
+    setInputValue(tempValue);
     form.setFieldsValue({
-      cronExpression: value,
+      cronExpression: tempValue,
     });
   }
 
@@ -57,11 +64,27 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           label="Cron 表达式"
           rules={[{ required: true, message: '请输入Cron 表达式！' }]}
         >
-          <Input placeholder="请输入Cron 表达式" defaultValue={"* * * * * ? *"}/>
+          <Input placeholder="请输入Cron 表达式" defaultValue={inputValue}/>
         </FormItem>
         <CronComponent
-          onChange={setInputValue}
+          onChange={handlerInput}
         />
+        <Divider orientation="left">最近运行时间</Divider>
+        {errMsg?.length !== 0 && (
+          <Typography.Text>{errMsg}</Typography.Text>
+        )}
+        {errMsg?.length === 0 && (
+          <List
+            dataSource={data}
+            size="small"
+            renderItem={item => (
+              <List.Item>
+                <Typography.Text>{item}</Typography.Text>
+              </List.Item>
+            )}
+          />
+        )}
+
       </Form>
     </Modal>
   );
