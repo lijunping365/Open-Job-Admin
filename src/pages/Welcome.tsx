@@ -13,7 +13,7 @@ export default (): React.ReactNode => {
     <PageContainer>
       <Card>
         <Alert
-          message='欢迎使用该分布式爬虫系统，你还可以把它当作一个分布式任务或定时调度系统。'
+          message='欢迎使用该分布式调度系统，一款简单易用且轻量级易拓展的一个分布式任务调度系统。'
           type="success"
           showIcon
           banner
@@ -24,13 +24,13 @@ export default (): React.ReactNode => {
         />
         <Typography.Text strong>
           <Tag icon={<BarChartOutlined />} color="#55acee">
-            企业级
+            轻量级
           </Tag>
-          <Tag icon={<DeploymentUnitOutlined />} color="#cd201f">
+          <Tag icon={<DeploymentUnitOutlined />} color="#55acee">
+            简单易用
+          </Tag>
+          <Tag icon={<BugOutlined />} color="#55acee">
             分布式
-          </Tag>
-          <Tag icon={<BugOutlined />} color="#3b5999">
-            爬虫系统
           </Tag>
           <Tag icon={<CoffeeOutlined />} color="#55acee">
             调度系统
@@ -46,7 +46,7 @@ export default (): React.ReactNode => {
           </Tag>
 
           <a
-            href="https://procomponents.ant.design/components/table"
+            href="https://github.com/lijunping365/Open-Job"
             rel="noopener noreferrer"
             target="__blank"
           >
