@@ -86,7 +86,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           name="cronExpression"
           label="Cron 表达式"
           rules={[{ required: true, message: '请输入Cron 表达式！' }]}
-          tooltip= {{title:cronTip, placement: 'rightTop', overlayStyle: { maxWidth: 600 }}}
+          tooltip= {{title:cronTip, placement: 'topLeft', overlayStyle: { maxWidth: 600 }, arrowPointAtCenter: true, color:'cyan'}}
         >
           <Input placeholder="请输入Cron 表达式" defaultValue={inputValue}/>
         </FormItem>
@@ -95,7 +95,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         />
         <Divider orientation="left">最近运行时间</Divider>
         {errMsg?.length !== 0 && (
-          <Typography.Text>{errMsg}</Typography.Text>
+          <Typography.Text type="danger">{errMsg}</Typography.Text>
         )}
         {errMsg?.length === 0 && (
           <List
