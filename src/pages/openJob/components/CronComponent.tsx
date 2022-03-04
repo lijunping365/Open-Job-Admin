@@ -594,7 +594,7 @@ const CronComponent: React.FC<CronProps> = (props) => {
             <Space direction="vertical">
               <Radio value={1}>每年 允许的通配符[, - * /] 非必填</Radio>
               <Radio value={2}>不指定</Radio>
-              <Radio value={3}>周期 从<Input value={year_cycle_1_value} onChange={(e: any)=>onYear_cycle_1_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={year_cycle_2_value} onChange={(e: any)=>onYear_cycle_2_value_change(e.target.value)} style={{width:'40px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>年</Radio>
+              <Radio value={3}>周期 从<Input value={year_cycle_1_value} onChange={(e: any)=>onYear_cycle_1_value_change(e.target.value)} style={{width:'60px', height:'20px', textAlign: 'center', margin: '0 3px'}}/> - <Input value={year_cycle_2_value} onChange={(e: any)=>onYear_cycle_2_value_change(e.target.value)} style={{width:'60px', height:'20px', textAlign: 'center', margin: '0 3px'}}/>年</Radio>
             </Space>
           </Radio.Group>
         </TabPane>

@@ -54,3 +54,12 @@ export async function stopScheduleTask(id: number) {
     method: 'PUT',
   });
 }
+
+export async function nextTriggerTime(cronExpress: string) {
+  return request(`/openJob/nextTriggerTime`, {
+    method: 'GET',
+    params: {
+      cronExpress,
+    },
+  });
+}
