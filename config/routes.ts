@@ -38,6 +38,7 @@
     icon: 'smile',
     path: 'openJobLog',
     component: './openJobLog',
+    hideInMenu: true,
   },
   {
     name: 'executor',

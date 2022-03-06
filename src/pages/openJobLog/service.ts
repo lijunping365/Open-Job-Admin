@@ -8,9 +8,11 @@ export async function fetchTaskLogPage(
     /** 页面的容量 */
     pageSize?: number;
     /** 任务id */
-    taskId?: number
+    jobId?: number;
     /** 任务状态 */
-    status?: number
+    status?: number;
+    /** 任务执行时间 */
+    createTime?: Date;
   }
 ) {
   return request('/openJobLog/page', {

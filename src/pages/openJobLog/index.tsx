@@ -1,5 +1,5 @@
 import {Button, message, Divider} from 'antd';
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -7,6 +7,7 @@ import { fetchTaskLogPage, removeTaskLog} from './service';
 import {confirmModal} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
 import type {OpenJobLog} from "./data";
+import {RouteChildrenProps} from "react-router";
 
 
 
@@ -30,19 +31,24 @@ const handleRemove = async (selectedRows: any[]) => {
   }
 };
 
-const TableList: React.FC = () => {
+const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const actionRef = useRef<ActionType>();
   const [selectedRowsState, setSelectedRows] = useState<OpenJobLog[]>([]);
+  const { query }: any = location;
+  const [jobId] = useState<number>(query? query.id : 0);
+
   const columns: ProColumns<OpenJobLog>[] = [
     {
       title: '编号',
       dataIndex: 'id',
       valueType: 'text',
+      search: false
     },
     {
       title: '任务编号',
       dataIndex: 'jobId',
       valueType: 'text',
+      search: false
     },
     {
       title: '调度结果',
@@ -56,6 +62,19 @@ const TableList: React.FC = () => {
       title: '调度时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
+      hideInSearch: true
+    },
+    {
+      title: '开始时间',
+      dataIndex: 'beginTime',
+      valueType: 'dateTime',
+      hideInTable: true
+    },
+    {
+      title: '结束时间',
+      dataIndex: 'endTime',
+      valueType: 'dateTime',
+      hideInTable: true
     },
     {
       title: '操作',
@@ -101,7 +120,7 @@ const TableList: React.FC = () => {
         }}
         toolBarRender={() => []}
         request={async (params) => {
-          const response = await fetchTaskLogPage({ ...params });
+          const response = await fetchTaskLogPage({ ...params, jobId });
           return {
             data: response.records,
             total: response.total,

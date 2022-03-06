@@ -9,6 +9,7 @@ import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeSched
 import {confirmModal} from "@/components/ConfirmModel";
 import type {OpenJob} from "./data";
 import CreateForm from "./components/CreateForm";
+import {Link} from "@umijs/preset-dumi/lib/theme";
 
 /**
  * 添加节点
@@ -204,6 +205,17 @@ const TableList: React.FC = () => {
           >
             删除
           </a>
+          <Divider type="vertical" />
+            <Link
+              to={{
+                pathname: '/openJobLog',
+                search: `?id=${record.id}`,
+                hash: '#the-hash',
+                state: { fromDashboard: true },
+              }}
+            >
+              查看日志
+            </Link>
         </>
       ),
     },
