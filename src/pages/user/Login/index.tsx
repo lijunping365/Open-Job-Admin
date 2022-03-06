@@ -1,4 +1,5 @@
 import {
+  DeploymentUnitOutlined,
   LockOutlined,
   MobileOutlined,
   UserOutlined
@@ -107,8 +108,8 @@ const Login: React.FC = () => {
         <div className={styles.top}>
           <div className={styles.header}>
             <Link to="/">
-              <img alt="logo" className={styles.logo} src="/logo.svg" />
-              <span className={styles.title}>Ant Design</span>
+              <span className={styles.logo}><DeploymentUnitOutlined style={{ fontSize: '44px' }} /></span>
+              <span className={styles.title}>Open Job</span>
             </Link>
           </div>
           <div className={styles.desc}>
