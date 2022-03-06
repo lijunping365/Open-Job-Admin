@@ -62,8 +62,8 @@ const CronModal: React.FC<CronModalProps> = (props) => {
 
   const handleFinish = async () => {
     const fieldsValue: any = await form.validateFields();
-    const {cronExpressValue} = fieldsValue;
-    handleCronExpressValue(cronExpressValue);
+    const {cronExpression} = fieldsValue;
+    handleCronExpressValue(cronExpression);
   };
 
   const handlerInput = async (index: number,value: string) => {

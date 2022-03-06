@@ -20,7 +20,7 @@ const formLayout = {
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   /** 新建窗口的弹窗 */
   const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
-  const [cronExpressValue, setCronExpressValue] = useState("* * * * * ? *")
+  const [cronExpressValue, setCronExpressValue] = useState("")
   const [form] = Form.useForm();
 
   const {
@@ -65,7 +65,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               label="Cron 表达式"
               rules={[{ required: true, message: '请输入Cron 表达式！' }]}>
               <Input.Group compact>
-                <Input placeholder="请输入Cron 表达式" style={{ width: 'calc(100% - 50%)' }} defaultValue={cronExpressValue}/>
+                <Input placeholder="请输入Cron 表达式" style={{ width: 'calc(100% - 50%)' }} value={cronExpressValue}/>
                 <Button
                   type="primary"
                   onClick={() => {
@@ -94,8 +94,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           modalVisible={cronModalVisible}
           onCancel={() => handleCronModalVisible(false)}
           onSubmit={(value)=>{
-            console.log("ddddddddddddddddd" + value)
-            setCronExpressValue(value)
+            setCronExpressValue(value);
             handleCronModalVisible(false);
           }}
         />
