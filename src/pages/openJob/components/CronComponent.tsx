@@ -462,43 +462,73 @@ const CronComponent: React.FC<CronProps> = (props) => {
 
   const onSecondCheckboxChange = (checkedValues: any[]) => {
     setSecondCheckboxValue(checkedValues);
-    if(secondRadioValue === 4){
+    if(secondRadioValue !== 4){
+      return;
+    }
+    if(checkedValues.length !== 0){
       setInputValue(0, checkedValues.join(","));
+    }else {
+      setInputValue(0, "*");
     }
   };
 
   const onMinutesCheckboxChange = (checkedValues: any) => {
     setMinutesCheckboxValue(checkedValues);
-    if(minutesRadioValue === 4){
+    if(minutesRadioValue !== 4){
+      return;
+    }
+    if (checkedValues.length !== 0){
       setInputValue(1, checkedValues.join(","));
+    }else {
+      setInputValue(1, "*");
     }
   };
 
   const onHourCheckboxChange = (checkedValues: any) => {
     setHourCheckboxValue(checkedValues);
-    if(hourRadioValue === 4){
+    if(hourRadioValue !== 4){
+      return;
+    }
+    if (checkedValues.length !== 0){
       setInputValue(2, checkedValues.join(","));
+    }else {
+      setInputValue(2, "*");
     }
   };
 
   const onDayCheckboxChange = (checkedValues: any) => {
     setDayCheckboxValue(checkedValues);
-    if(dayRadioValue === 7){
+    if(dayRadioValue !== 7){
+      return;
+    }
+    if (checkedValues.length !== 0){
       setInputValue(3, checkedValues.join(","));
+    }else {
+      setInputValue(3, "*");
     }
   };
 
   const onMonthCheckboxChange = (checkedValues: any) => {
     setMonthCheckboxValue(checkedValues);
-    if(monthRadioValue === 5){
+    if(monthRadioValue !== 5){
+      return;
+    }
+    if (checkedValues.length !== 0){
       setInputValue(4, checkedValues.join(","));
+    }else {
+      setInputValue(4, "*");
     }
   };
 
   const onWeekCheckboxChange = (checkedValues: any) => {
     setWeekCheckboxValue(checkedValues);
-    if(weekRadioValue === 6){
+    if(weekRadioValue !== 6){
+      return;
+    }
+    if (checkedValues.length !== 0){
       setInputValue(5, checkedValues.join(","));
+    }else {
+      setInputValue(5, "*");
     }
   };
 
