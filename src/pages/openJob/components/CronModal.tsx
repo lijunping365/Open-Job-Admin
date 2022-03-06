@@ -3,7 +3,7 @@ import {Divider, Form, Input, List, message, Modal, Typography} from 'antd';
 import CronComponent from "./CronComponent";
 import { nextTriggerTime } from '../service';
 
-interface CreateFormProps {
+interface CronModalProps {
   modalVisible: boolean;
   onCancel: (flag?: boolean) => void;
   onSubmit: (value: string) => void;
@@ -30,7 +30,7 @@ const formLayout = {
   wrapperCol: { span: 13 },
 };
 
-const CronModal: React.FC<CreateFormProps> = (props) => {
+const CronModal: React.FC<CronModalProps> = (props) => {
   const [form] = Form.useForm();
   const [inputValue, setInputValue] = React.useState("* * * * * ? *");
   const [errMsg, setErrMsg] = React.useState("");
@@ -38,8 +38,8 @@ const CronModal: React.FC<CreateFormProps> = (props) => {
 
   const {
     modalVisible,
-    onSubmit: handleCreate,
-    onCancel: handleCreateModalVisible,
+    onSubmit: handleCronExpressValue,
+    onCancel: handleCronModalVisible,
   } = props;
 
   useEffect(()=>{
@@ -60,11 +60,10 @@ const CronModal: React.FC<CreateFormProps> = (props) => {
     });
   },[modalVisible]);
 
-  const handleNext = async () => {
+  const handleFinish = async () => {
     const fieldsValue: any = await form.validateFields();
-    handleCreate({
-      ...fieldsValue,
-    });
+    const {cronExpressValue} = fieldsValue;
+    handleCronExpressValue(cronExpressValue);
   };
 
   const handlerInput = async (index: number,value: string) => {
@@ -89,11 +88,11 @@ const CronModal: React.FC<CreateFormProps> = (props) => {
   return (
     <Modal
       destroyOnClose
-      title="新建任务"
+      title="Cron 工具"
       width={640}
       visible={modalVisible}
-      onCancel={() => handleCreateModalVisible(false)}
-      onOk={() => handleNext()}
+      onCancel={() => handleCronModalVisible(false)}
+      onOk={() => handleFinish()}
     >
       <Form
         {...formLayout}

@@ -94,6 +94,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           modalVisible={cronModalVisible}
           onCancel={() => handleCronModalVisible(false)}
           onSubmit={(value)=>{
+            console.log("ddddddddddddddddd" + value)
             setCronExpressValue(value)
             handleCronModalVisible(false);
           }}
