@@ -1,8 +1,7 @@
-import React, {useEffect} from 'react';
-import {Divider, Form, Input, List, message, Modal, Typography} from 'antd';
+import React, {useState} from 'react';
+import {Button, Col, Form, Input, Modal, Row} from 'antd';
 import type {OpenJob} from "../data";
-import CronComponent from "./CronComponent";
-import { nextTriggerTime } from '../service';
+import CronModal from "@/pages/openJob/components/CronModal";
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -10,21 +9,8 @@ interface CreateFormProps {
   onSubmit: (values: Partial<OpenJob>) => void;
 }
 
-const cronTip = (
-  <span>
-    （1）*：表示匹配该域的任意值。假如在Minutes域使用*, 即表示每分钟都会触发事件。<br/>
-    （2）?：只能用在DayofMonth和DayofWeek两个域。它也匹配域的任意值，但实际不会。因为DayofMonth和DayofWeek会相互影响。例如想在每月的20日触发调度，不管20日到底是星期几，则只能使用如下写法： 13 13 15 20 * ?, 其中最后一位只能用？，而不能使用*，如果使用*表示不管星期几都会触发，实际上并不是这样。<br/>
-    （3）-：表示范围。例如在Minutes域使用5-20，表示从5分到20分钟每分钟触发一次。<br/>
-    （4）/：表示起始时间开始触发，然后每隔固定时间触发一次。例如在Minutes域使用5/20,则意味着5分钟触发一次，而25，45等分别触发一次。<br/>
-    （5）,：表示列出枚举值。例如：在Minutes域使用5,20，则意味着在5和20分每分钟触发一次。<br/>
-    （6）L：表示最后，只能出现在DayofWeek和DayofMonth域。如果在DayofWeek域使用5L,意味着在最后的一个星期四触发。<br/>
-    （7）W:表示有效工作日(周一到周五),只能出现在DayofMonth域，系统将在离指定日期的最近的有效工作日触发事件。例如：在 DayofMonth使用5W，如果5日是星期六，则将在最近的工作日：星期五，即4日触发。如果5日是星期天，则在6日(周一)触发；如果5日在星期一到星期五中的一天，则就在5日触发。另外一点，W的最近寻找不会跨过月份 。<br/>
-    （8）LW:这两个字符可以连用，表示在某个月最后一个工作日，即最后一个星期五。<br/>
-    （9）#:用于确定每个月第几个星期几，只能出现在DayofMonth域。例如在4#2，表示某月的第二个星期三。
-  </span>
-);
-
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 const formLayout = {
   labelCol: { span: 7 },
@@ -32,34 +18,16 @@ const formLayout = {
 };
 
 const CreateForm: React.FC<CreateFormProps> = (props) => {
+  /** 新建窗口的弹窗 */
+  const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
+  const [cronExpressValue, setCronExpressValue] = useState("* * * * * ? *")
   const [form] = Form.useForm();
-  const [inputValue, setInputValue] = React.useState("* * * * * ? *");
-  const [errMsg, setErrMsg] = React.useState("");
-  const [nextTimeList, setNextTimeList] = React.useState<string[]>([]);
 
   const {
     modalVisible,
     onSubmit: handleCreate,
     onCancel: handleCreateModalVisible,
   } = props;
-
-  useEffect(()=>{
-    if (!modalVisible){
-      return;
-    }
-    nextTriggerTime(inputValue).then((res: string[]) => {
-      if(res && res.length === 5){
-        setNextTimeList(res);
-        form.setFieldsValue({
-          cronExpression: inputValue,
-        });
-      }else{
-        setErrMsg(res[0]);
-      }
-    }).catch(() => {
-      message.error('获取下次执行时间失败，请重试');
-    });
-  },[modalVisible]);
 
   const handleNext = async () => {
     const fieldsValue: any = await form.validateFields();
@@ -68,30 +36,11 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     });
   };
 
-  const handlerInput = async (index: number,value: string) => {
-    const regs: any[] = inputValue.split(' ');
-    regs[index] = value;
-    const tempValue = regs.join(' ');
-    nextTriggerTime(tempValue).then((res: string[]) => {
-      if(res && res.length === 5){
-        setNextTimeList(res);
-        setInputValue(tempValue);
-        form.setFieldsValue({
-          cronExpression: tempValue,
-        });
-      }else{
-        setErrMsg(res[0]);
-      }
-    }).catch(() => {
-      message.error('获取下次执行时间失败，请重试');
-    });
-  }
-
   return (
     <Modal
       destroyOnClose
       title="新建任务"
-      width={640}
+      width={900}
       visible={modalVisible}
       onCancel={() => handleCreateModalVisible(false)}
       onOk={() => handleNext()}
@@ -100,33 +49,55 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         {...formLayout}
         form={form}
       >
-        <FormItem
-          name="cronExpression"
-          label="Cron 表达式"
-          rules={[{ required: true, message: '请输入Cron 表达式！' }]}
-          tooltip= {{title:cronTip, placement: 'topLeft', overlayStyle: { maxWidth: 600 }, arrowPointAtCenter: true, color:'cyan'}}
-        >
-          <Input placeholder="请输入Cron 表达式" value={inputValue}/>
-        </FormItem>
-        <CronComponent
-          onChange={handlerInput}
-        />
-        <Divider orientation="left">最近运行时间</Divider>
-        {errMsg?.length !== 0 && (
-          <Typography.Text type="danger">{errMsg}</Typography.Text>
-        )}
-        {errMsg?.length === 0 && (
-          <List
-            dataSource={nextTimeList}
-            size="small"
-            renderItem={item => (
-              <List.Item>
-                <Typography.Text>{item}</Typography.Text>
-              </List.Item>
-            )}
-          />
-        )}
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="name"
+              label="任务名称"
+              rules={[{ required: true, message: '请输入任务名称！' }]}
+            >
+              <Input placeholder="请输入任务名称" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
+              name="cronExpression"
+              label="Cron 表达式"
+              rules={[{ required: true, message: '请输入Cron 表达式！' }]}>
+              <Input.Group compact>
+                <Input placeholder="请输入Cron 表达式" style={{ width: 'calc(100% - 50%)' }} defaultValue={cronExpressValue}/>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    handleCronModalVisible(true);
+                  }}
+                >
+                  Cron 工具
+                </Button>
+              </Input.Group>
+            </FormItem>
+          </Col>
+        </Row>
 
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="params"
+              label="任务参数"
+            >
+              <TextArea rows={4}  placeholder="请输入任务参数（json 格式）" />
+            </FormItem>
+          </Col>
+        </Row>
+
+        <CronModal
+          modalVisible={cronModalVisible}
+          onCancel={() => handleCronModalVisible(false)}
+          onSubmit={(value)=>{
+            setCronExpressValue(value)
+            handleCronModalVisible(false);
+          }}
+        />
       </Form>
     </Modal>
   );
