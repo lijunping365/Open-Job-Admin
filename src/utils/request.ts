@@ -44,7 +44,7 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
   if (response && response.status) {
     if (response.status === 200) {
       // 处理图片验证码
-      if (response.url.includes('image')) {
+      if (response.url.includes('/validate/code') && options.data.type === "image") {
         return response.clone().arrayBuffer();
       }
 
