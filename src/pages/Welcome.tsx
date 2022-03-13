@@ -13,7 +13,7 @@ export default (): React.ReactNode => {
     <PageContainer>
       <Card>
         <Alert
-          message='欢迎使用该分布式调度系统，一款简单易用且轻量级易拓展的一个分布式任务调度系统。'
+          message='欢迎使用 Open-Job，一款简单易用且轻量级易拓展的分布式任务调度系统。'
           type="success"
           showIcon
           banner

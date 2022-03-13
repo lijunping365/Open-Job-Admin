@@ -109,7 +109,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     waterMarkProps: {
-      content: '分布式调度系统',
+      content: 'Open-Job',
 
     },
     footerRender: () => <Footer />,
