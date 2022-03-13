@@ -126,6 +126,7 @@ const TableList: React.FC = () => {
       title: '任务编号',
       dataIndex: 'id',
       valueType: 'text',
+      search: false,
     },
     {
       title: '任务名称',
@@ -139,7 +140,7 @@ const TableList: React.FC = () => {
       search: false,
     },
     {
-      title: 'handler 名称',
+      title: 'Handler 名称',
       dataIndex: 'handlerName',
       valueType: 'text',
     },
