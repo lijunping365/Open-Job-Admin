@@ -5,7 +5,6 @@ import { nextTriggerTime } from '../service';
 
 interface CronModalProps {
   modalVisible: boolean;
-  cronExpressionValue: string;
   onCancel: (flag?: boolean) => void;
   onSubmit: (value: string) => void;
 }
@@ -34,13 +33,12 @@ const formLayout = {
 const CronModal: React.FC<CronModalProps> = (props) => {
   const {
     modalVisible,
-    cronExpressionValue,
     onSubmit: handleCronExpressValue,
     onCancel: handleCronModalVisible,
   } = props;
 
   const [form] = Form.useForm();
-  const [inputValue, setInputValue] = React.useState(cronExpressionValue || "* * * * * ? *");
+  const [inputValue, setInputValue] = React.useState("* * * * * ? *");
   const [errMsg, setErrMsg] = React.useState("");
   const [nextTimeList, setNextTimeList] = React.useState<string[]>([]);
 
