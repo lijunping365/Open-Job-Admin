@@ -42,15 +42,13 @@ const CronModal: React.FC<CronModalProps> = (props) => {
   const [errMsg, setErrMsg] = React.useState("");
   const [nextTimeList, setNextTimeList] = React.useState<string[]>([]);
 
-  useEffect(()=>{
-    if (!modalVisible){
-      return;
-    }
-    nextTriggerTime(inputValue).then((res: string[]) => {
+  const handlerChange = (value: string) => {
+    nextTriggerTime(value).then((res: string[]) => {
       if(res && res.length === 5){
         setNextTimeList(res);
+        setInputValue(value);
         form.setFieldsValue({
-          cronExpression: inputValue,
+          cronExpression: value,
         });
       }else{
         setErrMsg(res[0]);
@@ -58,6 +56,13 @@ const CronModal: React.FC<CronModalProps> = (props) => {
     }).catch(() => {
       message.error('获取下次执行时间失败，请重试');
     });
+  }
+
+  useEffect(()=>{
+    if (!modalVisible){
+      return;
+    }
+    handlerChange(inputValue);
   },[modalVisible]);
 
   const handleFinish = async () => {
@@ -70,19 +75,7 @@ const CronModal: React.FC<CronModalProps> = (props) => {
     const regs: any[] = inputValue.split(' ');
     regs[index] = value;
     const tempValue = regs.join(' ');
-    nextTriggerTime(tempValue).then((res: string[]) => {
-      if(res && res.length === 5){
-        setNextTimeList(res);
-        setInputValue(tempValue);
-        form.setFieldsValue({
-          cronExpression: tempValue,
-        });
-      }else{
-        setErrMsg(res[0]);
-      }
-    }).catch(() => {
-      message.error('获取下次执行时间失败，请重试');
-    });
+    handlerChange(tempValue);
   }
 
   return (
@@ -104,7 +97,7 @@ const CronModal: React.FC<CronModalProps> = (props) => {
           rules={[{ required: true, message: '请输入Cron 表达式！' }]}
           tooltip= {{title:cronTip, placement: 'topLeft', overlayStyle: { maxWidth: 600 }, arrowPointAtCenter: true, color:'cyan'}}
         >
-          <Input placeholder="请输入Cron 表达式" value={inputValue}/>
+          <Input placeholder="请输入Cron 表达式" value={inputValue} onChange={(event)=> handlerChange(event.target.value)}/>
         </FormItem>
         <CronComponent
           onChange={handlerInput}
