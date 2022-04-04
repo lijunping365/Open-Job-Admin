@@ -15,7 +15,7 @@ export async function fetchTaskLogPage(
     createTime?: Date;
   }
 ) {
-  return request('/openJobLog/page', {
+  return request('/logger/page', {
     method: 'GET',
     params: {
       ...params,
@@ -24,7 +24,7 @@ export async function fetchTaskLogPage(
 }
 
 export async function removeTaskLog(params: {ids: number[]}) {
-  return request('/openJobLog/delete', {
+  return request('/logger/delete', {
     method: 'DELETE',
     data: {...params}
   });

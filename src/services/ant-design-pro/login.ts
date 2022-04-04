@@ -20,7 +20,7 @@ export async function outLogin() {
 
 /** 发送验证码 POST /validate/code/ */
 export async function getFakeCaptcha(params: Partial<API.CaptchaParams>) {
-  return request('/validate/code', {
+  return request('/captcha/create', {
     method: 'POST',
     data: {
       ...params,

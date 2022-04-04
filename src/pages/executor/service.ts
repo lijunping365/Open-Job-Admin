@@ -14,7 +14,7 @@ export async function fetchInstancePage(
     status?: number
   }
 ) {
-  return request('/instanceManager/page', {
+  return request('/instance/page', {
     method: 'GET',
     params: {
       ...params,
@@ -23,20 +23,20 @@ export async function fetchInstancePage(
 }
 
 export async function updateInstance(params: Partial<Instance>) {
-  return request('/instanceManager/update', {
+  return request('/instance/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
 export async function offline(clientId: string) {
-  return request(`/instanceManager/offline/${clientId}`, {
+  return request(`/instance/offline/${clientId}`, {
     method: 'PUT',
   });
 }
 
 export async function online(clientId: string) {
-  return request(`/instanceManager/online/${clientId}`, {
+  return request(`/instance/online/${clientId}`, {
     method: 'PUT',
   });
 }

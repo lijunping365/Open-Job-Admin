@@ -12,7 +12,7 @@ export async function fetchUserPage(
     name?: string
   },
 ) {
-  return request('/openJobUser/page', {
+  return request('/user/page', {
     method: 'GET',
     params: {
       ...params,
@@ -21,21 +21,21 @@ export async function fetchUserPage(
 }
 
 export async function updateUser(params: Partial<User>) {
-  return request('/openJobUser/update', {
+  return request('/user/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
 export async function addUser(params: User) {
-  return request('/openJobUser/save', {
+  return request('/user/save', {
     method: 'POST',
     data: {...params}
   });
 }
 
 export async function removeUser(params: {ids: number[]}) {
-  return request('/openJobUser/delete', {
+  return request('/user/delete', {
     method: 'PUT',
     data: {...params}
   });
