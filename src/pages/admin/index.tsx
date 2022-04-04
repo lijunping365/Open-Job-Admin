@@ -4,7 +4,7 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import { fetchUserPage, updateUser, removeUser } from '@/services/ant-design-pro/api';
+import { fetchUserPage, updateUser, removeUser } from '@/services/open-job/api';
 import {confirmModal} from "@/components/ConfirmModel";
 
 /**

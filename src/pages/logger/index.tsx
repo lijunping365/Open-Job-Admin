@@ -3,7 +3,7 @@ import React, {useState, useRef} from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { fetchTaskLogPage, removeTaskLog} from '@/services/ant-design-pro/api';
+import { fetchTaskLogPage, removeTaskLog} from '@/services/open-job/api';
 import {confirmModal} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
 import type {RouteChildrenProps} from "react-router";

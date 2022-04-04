@@ -81,29 +81,6 @@ declare namespace API {
     progress?: number;
   };
 
-  type TypeListItem = {
-    id?: number;
-    name?: string;
-    createTime?: string;
-  };
-
-  type ProxyGroupListItem = {
-    id?: number;
-    groupName?: string;
-    createTime?: string;
-  };
-
-  type ProxyIpListItem = {
-    id?: number;
-    groupId?: number;
-    ip?: string;
-    port?: string;
-    type?: number;
-    status?: number;
-    createTime?: string;
-    verifyTime?: string;
-  };
-
   type RuleList = {
     data?: RuleListItem[];
     /** 列表的内容总数 */
@@ -124,22 +101,6 @@ declare namespace API {
     mobile?: string;
     captcha?: string;
     type?: string;
-  };
-
-  type ErrorResponse = {
-    /** 业务约定的错误码 */
-    errorCode: string;
-    /** 业务上的错误信息 */
-    errorMessage?: string;
-    /** 业务上的请求是否成功 */
-    success?: boolean;
-  };
-
-  type NoticeIconList = {
-    data?: NoticeIconItem[];
-    /** 列表的内容总数 */
-    total?: number;
-    success?: boolean;
   };
 
   type NoticeIconItemType = 'notification' | 'message' | 'event';

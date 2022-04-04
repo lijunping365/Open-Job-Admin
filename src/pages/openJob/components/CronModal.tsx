@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Divider, Form, Input, List, message, Modal, Typography} from 'antd';
 import CronComponent from "./CronComponent";
-import { nextTriggerTime } from '@/services/ant-design-pro/api';
+import { nextTriggerTime } from '@/services/open-job/api';
 
 interface CronModalProps {
   modalVisible: boolean;
