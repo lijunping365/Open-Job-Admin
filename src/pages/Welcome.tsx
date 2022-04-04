@@ -72,9 +72,6 @@ export default (): React.ReactNode => {
             </Card>
           </Col>
         </Row>
-
-
-
       </Card>
     </PageContainer>
   );

@@ -62,15 +62,15 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
       }
 
       if (result && result.code === 403) {
-        history.push('/exception/403');
+        history.push('/403');
       }
 
       if (result && result.code === 404) {
-        history.push('/exception/404');
+        history.push('/404');
       }
 
       if (result && result.code === 500) {
-        history.push('/exception/500');
+        history.push('/500');
       }
 
       return result;
