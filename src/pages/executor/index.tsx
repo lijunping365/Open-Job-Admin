@@ -5,7 +5,7 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import {confirmModal} from "@/components/ConfirmModel";
-import { fetchInstancePage, updateInstance, offline, online } from './service';
+import { fetchInstancePage, updateInstance, offline, online } from '@/services/ant-design-pro/api';
 
 /**
  * 更新节点
