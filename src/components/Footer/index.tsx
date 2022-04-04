@@ -15,21 +15,21 @@ export default () => {
       copyright={`2022 ${defaultMessage}`}
       links={[
         {
-          key: 'Ant Design Pro',
-          title: 'Ant Design Pro',
-          href: 'https://pro.ant.design',
+          key: 'Open-Job-Admin',
+          title: 'Open-Job-Admin',
+          href: 'https://github.com/lijunping365/Open-Job-Admin',
           blankTarget: true,
         },
         {
           key: 'github',
           title: <GithubOutlined />,
-          href: 'https://github.com/ant-design/ant-design-pro',
+          href: 'https://github.com/lijunping365/Open-Job-Admin',
           blankTarget: true,
         },
         {
-          key: 'Ant Design',
-          title: 'Ant Design',
-          href: 'https://ant.design',
+          key: 'Open Job',
+          title: 'Open Job',
+          href: 'https://github.com/lijunping365/Open-Job',
           blankTarget: true,
         },
       ]}

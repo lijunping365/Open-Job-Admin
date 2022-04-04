@@ -58,7 +58,7 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
       }
 
       if (result && result.code === 401 && ignorePath()) {
-        history.push('/user/login');
+        history.push('/login');
       }
 
       if (result && result.code === 403) {
