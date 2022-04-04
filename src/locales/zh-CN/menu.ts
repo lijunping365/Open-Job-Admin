@@ -7,7 +7,7 @@ export default {
   'menu.dashboard': '运行报表',
   'menu.executor': '执行器管理',
   'menu.openJob': '任务管理',
-  'menu.openJobLog': '任务日志',
+  'menu.logger': '任务日志',
   'menu.admin': '用户管理',
   'menu.basic': '用户管理',
   'menu.register': '注册',

@@ -34,10 +34,10 @@
     component: './openJob',
   },
   {
-    name: 'openJobLog',
+    name: 'logger',
     icon: 'smile',
-    path: 'openJobLog',
-    component: './openJobLog',
+    path: 'logger',
+    component: './logger',
     hideInMenu: true,
   },
   {

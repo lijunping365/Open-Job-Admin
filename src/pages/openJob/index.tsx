@@ -209,7 +209,7 @@ const TableList: React.FC = () => {
           <Divider type="vertical" />
             <Link
               to={{
-                pathname: '/openJobLog',
+                pathname: '/logger',
                 search: `?id=${record.id}`,
                 hash: '#the-hash',
                 state: { fromDashboard: true },
