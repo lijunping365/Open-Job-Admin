@@ -6,14 +6,13 @@ import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import { fetchUserPage, updateUser, removeUser } from './service';
 import {confirmModal} from "@/components/ConfirmModel";
-import type { User } from './data';
 
 /**
  * 更新节点
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<User>) => {
+const handleUpdate = async (fields: Partial<API.User>) => {
   const hide = message.loading('正在配置');
   try {
     await updateUser(fields);
@@ -55,9 +54,9 @@ const TableList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
   // const [currentRow, setCurrentRow] = useState<User>();
-  const [selectedRowsState, setSelectedRows] = useState<User[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.User[]>([]);
 
-  const columns: ProColumns<User>[] = [
+  const columns: ProColumns<API.User>[] = [
     {
       title: '用户id',
       dataIndex: 'id',
@@ -123,7 +122,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<User>
+      <ProTable<API.User>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"

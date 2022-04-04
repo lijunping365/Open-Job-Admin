@@ -6,8 +6,7 @@ import ProTable from '@ant-design/pro-table';
 import { fetchTaskLogPage, removeTaskLog} from './service';
 import {confirmModal} from "@/components/ConfirmModel";
 import {Link} from "@umijs/preset-dumi/lib/theme";
-import type {OpenJobLog} from "./data";
-import {RouteChildrenProps} from "react-router";
+import type {RouteChildrenProps} from "react-router";
 
 
 
@@ -33,11 +32,11 @@ const handleRemove = async (selectedRows: any[]) => {
 
 const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const actionRef = useRef<ActionType>();
-  const [selectedRowsState, setSelectedRows] = useState<OpenJobLog[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.OpenJobLog[]>([]);
   const { query }: any = location;
   const [jobId] = useState<number>(query? query.id : 0);
 
-  const columns: ProColumns<OpenJobLog>[] = [
+  const columns: ProColumns<API.OpenJobLog>[] = [
     {
       title: '编号',
       dataIndex: 'id',
@@ -111,7 +110,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
   return (
     <PageContainer>
-      <ProTable<OpenJobLog>
+      <ProTable<API.OpenJobLog>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"

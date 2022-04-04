@@ -9,7 +9,7 @@ import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import {requestInterceptor, responseInterceptor} from "@/utils/request";
 
-const loginPath = '/user/login';
+const loginPath = '/login';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {

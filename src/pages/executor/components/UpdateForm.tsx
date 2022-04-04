@@ -1,12 +1,11 @@
 import React from 'react';
 import {Form, Button, Input, Modal} from 'antd';
-import type {Instance} from "../data";
 
 export interface UpdateFormProps {
-  onCancel: (flag?: boolean, formVals?: Partial<Instance>) => void;
-  onSubmit: (values: Partial<Instance>) => void;
+  onCancel: (flag?: boolean, formVals?: Partial<API.Instance>) => void;
+  onSubmit: (values: Partial<API.Instance>) => void;
   updateModalVisible: boolean;
-  values: Partial<Instance>;
+  values: Partial<API.Instance>;
 }
 const FormItem = Form.Item;
 

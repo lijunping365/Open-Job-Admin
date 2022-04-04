@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
 import {Button, Col, Form, Input, Modal, Row} from 'antd';
-import type {OpenJob} from "../data";
 import CronModal from "@/pages/openJob/components/CronModal";
 
 interface CreateFormProps {
   modalVisible: boolean;
   onCancel: (flag?: boolean) => void;
-  onSubmit: (values: Partial<OpenJob>) => void;
+  onSubmit: (values: Partial<API.OpenJob>) => void;
 }
 
 const FormItem = Form.Item;

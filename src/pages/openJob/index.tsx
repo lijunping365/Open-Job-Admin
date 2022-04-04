@@ -7,7 +7,6 @@ import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeScheduleTask, startScheduleTask, stopScheduleTask } from './service';
 import {confirmModal} from "@/components/ConfirmModel";
-import type {OpenJob} from "./data";
 import CreateForm from "./components/CreateForm";
 import {Link} from "@umijs/preset-dumi/lib/theme";
 
@@ -16,7 +15,7 @@ import {Link} from "@umijs/preset-dumi/lib/theme";
  *
  * @param fields
  */
-const handleAdd = async (fields: Partial<OpenJob>) => {
+const handleAdd = async (fields: Partial<API.OpenJob>) => {
   const hide = message.loading('正在添加');
   try {
     await addScheduleTask(fields);
@@ -35,7 +34,7 @@ const handleAdd = async (fields: Partial<OpenJob>) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<OpenJob>) => {
+const handleUpdate = async (fields: Partial<API.OpenJob>) => {
   const hide = message.loading('正在配置');
   try {
     await updateScheduleTask(fields);
@@ -119,9 +118,9 @@ const TableList: React.FC = () => {
 
   const actionRef = useRef<ActionType>();
   // const [currentRow, setCurrentRow] = useState<ScheduleTask>();
-  const [selectedRowsState, setSelectedRows] = useState<OpenJob[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.OpenJob[]>([]);
 
-  const columns: ProColumns<OpenJob>[] = [
+  const columns: ProColumns<API.OpenJob>[] = [
     {
       title: '任务编号',
       dataIndex: 'id',
@@ -224,7 +223,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<OpenJob>
+      <ProTable<API.OpenJob>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"

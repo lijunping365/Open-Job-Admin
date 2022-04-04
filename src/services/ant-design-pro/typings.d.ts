@@ -2,6 +2,38 @@
 /* eslint-disable */
 
 declare namespace API {
+  type User = {
+    id: number;
+    username: string;
+    status: number;
+    phone: string;
+    createTime: Date
+  };
+
+  type Instance = {
+    clientId: string;
+    onlineTime: Date;
+    status: string;
+    weight: number;
+  };
+
+  type OpenJobLog = {
+    id: number;
+    jobId: number;
+    status: number;
+    createTime: Date;
+  };
+
+  type OpenJob = {
+    id: number;
+    jobName: string;
+    handlerName: string;
+    cronExpression: string;
+    status: number;
+    createTime: Date;
+    createUser: number;
+  };
+
   type CurrentUser = {
     username?: string;
     avatar?: string;

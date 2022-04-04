@@ -1,5 +1,4 @@
 import { request } from 'umi';
-import type {Instance} from "./data";
 
 export async function fetchInstancePage(
   params: {
@@ -22,7 +21,7 @@ export async function fetchInstancePage(
   });
 }
 
-export async function updateInstance(params: Partial<Instance>) {
+export async function updateInstance(params: Partial<API.Instance>) {
   return request('/instance/update', {
     method: 'PUT',
     data: {...params}

@@ -1,12 +1,11 @@
 import React from 'react';
 import {Form, Button, Input, Modal} from 'antd';
-import type {OpenJob} from "../data";
 
 export interface UpdateFormProps {
-  onCancel: (flag?: boolean, formVals?: Partial<OpenJob>) => void;
-  onSubmit: (values: Partial<OpenJob>) => void;
+  onCancel: (flag?: boolean, formVals?: Partial<API.OpenJob>) => void;
+  onSubmit: (values: Partial<API.OpenJob>) => void;
   updateModalVisible: boolean;
-  values: Partial<OpenJob>;
+  values: Partial<API.OpenJob>;
 }
 const FormItem = Form.Item;
 

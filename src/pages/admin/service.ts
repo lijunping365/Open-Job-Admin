@@ -1,5 +1,4 @@
 import { request } from 'umi';
-import type {User} from "./data";
 
 
 export async function fetchUserPage(
@@ -20,14 +19,14 @@ export async function fetchUserPage(
   });
 }
 
-export async function updateUser(params: Partial<User>) {
+export async function updateUser(params: Partial<API.User>) {
   return request('/user/update', {
     method: 'PUT',
     data: {...params}
   });
 }
 
-export async function addUser(params: User) {
+export async function addUser(params: API.User) {
   return request('/user/save', {
     method: 'POST',
     data: {...params}

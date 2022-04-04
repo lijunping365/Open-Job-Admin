@@ -5,7 +5,6 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import {confirmModal} from "@/components/ConfirmModel";
-import type { Instance } from './data';
 import { fetchInstancePage, updateInstance, offline, online } from './service';
 
 /**
@@ -13,7 +12,7 @@ import { fetchInstancePage, updateInstance, offline, online } from './service';
  *
  * @param fields
  */
-const handleUpdate = async (fields: Partial<Instance>) => {
+const handleUpdate = async (fields: Partial<API.Instance>) => {
   const hide = message.loading('正在配置');
   try {
     await updateInstance(fields);
@@ -68,8 +67,8 @@ const TableList: React.FC = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<Instance>();
-  const columns: ProColumns<Instance>[] = [
+  const [currentRow, setCurrentRow] = useState<API.Instance>();
+  const columns: ProColumns<API.Instance>[] = [
     {
       title: '实例地址',
       dataIndex: 'clientId',
@@ -132,7 +131,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<Instance, API.PageParams>
+      <ProTable<API.Instance, API.PageParams>
         headerTitle="查询表格"
         actionRef={actionRef}
         rowKey="id"
