@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { PageLoading } from '@ant-design/pro-layout';
-import { notification } from 'antd';
 import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import RightContent from '@/components/RightContent';
@@ -49,17 +48,7 @@ export async function getInitialState(): Promise<{
 
 export const request: RequestConfig = {
   requestInterceptors: [requestInterceptor],
-  responseInterceptors: [responseInterceptor],
-  errorHandler: (error: any) => {
-    const { response } = error;
-    if (!response) {
-      notification.error({
-        description: '您的网络发生异常，无法连接服务器',
-        message: '网络异常',
-      });
-    }
-    throw error;
-  },
+  responseInterceptors: [responseInterceptor]
 };
 
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
