@@ -39,12 +39,13 @@ const CronModal: React.FC<CronModalProps> = (props) => {
 
   const [form] = Form.useForm();
   const [inputValue, setInputValue] = React.useState("* * * * * ? *");
-  const [errMsg, setErrMsg] = React.useState("");
+  const [errMsg, setErrMsg] = React.useState<string>();
   const [nextTimeList, setNextTimeList] = React.useState<string[]>([]);
 
   const handlerChange = (value: string) => {
     nextTriggerTime(value).then((res: string[]) => {
       if(res && res.length === 5){
+        setErrMsg("");
         setNextTimeList(res);
         setInputValue(value);
         form.setFieldsValue({
@@ -103,10 +104,10 @@ const CronModal: React.FC<CronModalProps> = (props) => {
           onChange={handlerInput}
         />
         <Divider orientation="left">最近运行时间</Divider>
-        {errMsg?.length !== 0 && (
+        {(errMsg && errMsg?.length !== 0) && (
           <Typography.Text type="danger">{errMsg}</Typography.Text>
         )}
-        {errMsg?.length === 0 && (
+        {(!errMsg || errMsg?.length === 0) && (
           <List
             dataSource={nextTimeList}
             size="small"

@@ -210,3 +210,23 @@ export async function nextTriggerTime(cronExpress: string) {
   });
 }
 
+export async function fetchSpiderNumber() {
+  return request('/statistic/number', {
+    method: 'GET',
+  });
+}
+
+export async function fetchSpiderReport() {
+  return request('/statistic/report', {
+    method: 'GET',
+  });
+}
+
+export async function validateCronExpress(cronExpress: string) {
+  return request(`/task/validateCron`, {
+    method: 'GET',
+    params: {
+      cronExpress,
+    },
+  });
+}

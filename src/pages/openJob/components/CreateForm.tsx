@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {Button, Col, Form, Input, Modal, Row} from 'antd';
+import {Button, Col, Form, Input, message, Modal, Row} from 'antd';
 import CronModal from "@/pages/openJob/components/CronModal";
+import {validateCronExpress} from "@/services/open-job/api";
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -19,7 +20,7 @@ const formLayout = {
 const CreateForm: React.FC<CreateFormProps> = (props) => {
   /** 新建窗口的弹窗 */
   const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
-  const [cronExpressValue, setCronExpressValue] = useState("")
+  const [cronExpressValue, setCronExpressValue] = useState<string>();
   const [form] = Form.useForm();
 
   const {
@@ -28,10 +29,20 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     onCancel: handleCreateModalVisible,
   } = props;
 
-  const handleNext = async () => {
+  const handleFinish = async () => {
     const fieldsValue: any = await form.validateFields();
+    if(!cronExpressValue || cronExpressValue.length === 0){
+      message.error("cron 表达式不能为空");
+      return;
+    }
+    const result = await validateCronExpress(cronExpressValue);
+    if(!result || result !== 'success'){
+      message.error("cron 校验失败，请重新输入");
+      return;
+    }
     handleCreate({
       ...fieldsValue,
+      cronExpression: cronExpressValue
     });
   };
 
@@ -42,7 +53,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       width={900}
       visible={modalVisible}
       onCancel={() => handleCreateModalVisible(false)}
-      onOk={() => handleNext()}
+      onOk={() => handleFinish()}
     >
       <Form
         {...formLayout}
@@ -63,8 +74,8 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
               name="cronExpression"
               label="Cron 表达式"
               rules={[{ required: true, message: '请输入Cron 表达式！' }]}>
-              <Input.Group compact>
-                <Input placeholder="请输入Cron 表达式" style={{ width: 'calc(100% - 50%)' }} value={cronExpressValue}/>
+              <Input.Group compact style={{display: 'flex'}}>
+                <Input placeholder="请输入Cron 表达式"  value={cronExpressValue} onChange={(e)=>setCronExpressValue(e.target.value)}/>
                 <Button
                   type="primary"
                   onClick={() => {

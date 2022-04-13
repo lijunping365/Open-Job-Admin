@@ -17,6 +17,21 @@ declare namespace API {
     weight: number;
   };
 
+  type StatisticNumber = {
+    taskTotalNum: number;
+    taskRunningNum: number;
+    scheduleTotalNum: number;
+    scheduleSucceedNum: number;
+    executorTotalNum: number;
+    executorOnlineNum: number;
+  }
+
+  type StatisticReport = {
+    date: Date;
+    name: string;
+    value: number;
+  }
+
   type OpenJobLog = {
     id: number;
     jobId: number;
