@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Button, Col, Form, Input, message, Modal, Row} from 'antd';
-import CronModal from "@/pages/openJob/components/CronModal";
+import CronModal from "@/components/CronModel";
 import {validateCronExpress} from "@/services/open-job/api";
 
 interface CreateFormProps {
@@ -46,12 +46,24 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     });
   };
 
+  const renderFooter = () => {
+    return (
+      <>
+        <Button onClick={() => handleCreateModalVisible(false)}>取消</Button>
+        <Button type="primary" onClick={() => handleFinish()}>
+          保存
+        </Button>
+      </>
+    );
+  };
+
   return (
     <Modal
       destroyOnClose
       title="新建任务"
       width={900}
       visible={modalVisible}
+      footer={renderFooter()}
       onCancel={() => handleCreateModalVisible(false)}
       onOk={() => handleFinish()}
     >

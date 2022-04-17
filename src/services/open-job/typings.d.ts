@@ -44,6 +44,7 @@ declare namespace API {
     jobName: string;
     handlerName: string;
     cronExpression: string;
+    params: string;
     status: number;
     createTime: Date;
     createUser: number;
