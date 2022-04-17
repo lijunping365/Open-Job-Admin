@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {Form, Button, Input, Modal, Row, Col} from 'antd';
+import {Form, Button, Input, Modal, Row, Col, message} from 'antd';
 import CronModal from "@/components/CronModel";
+import {validateCronExpress} from "@/services/open-job/api";
 
 export interface UpdateFormProps {
   onCancel: (flag?: boolean, formVals?: Partial<API.OpenJob>) => void;
@@ -17,22 +18,31 @@ const formLayout = {
 };
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
-  const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
-  const [cronExpressValue, setCronExpressValue] = useState<string>();
   const [form] = Form.useForm();
-
   const {
     onSubmit: handleUpdate,
     onCancel: handleUpdateModalVisible,
     updateModalVisible,
     values,
   } = props;
+  const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
+  const [cronExpressValue, setCronExpressValue] = useState<any>(values.cronExpression);
 
   const handleSave = async () => {
     const fieldsValue: any = await form.validateFields();
+    if(!cronExpressValue || cronExpressValue.length === 0){
+      message.error("cron 表达式不能为空");
+      return;
+    }
+    const result = await validateCronExpress(cronExpressValue);
+    if(!result || result !== 'success'){
+      message.error("cron 校验失败，请重新输入");
+      return;
+    }
     handleUpdate({
       ...values,
       ...fieldsValue,
+      cronExpression: cronExpressValue
     });
   };
 
@@ -65,7 +75,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           jobName: values.jobName,
           handlerName: values.handlerName,
           params: values.params,
-          cronExpression: values.cronExpression,
         }}
       >
         <Row>
