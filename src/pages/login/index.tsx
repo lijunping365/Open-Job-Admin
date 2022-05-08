@@ -8,10 +8,9 @@ import React, {useCallback, useEffect, useState} from 'react';
 import ProForm, { ProFormCaptcha, ProFormText } from '@ant-design/pro-form';
 import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import { login, getFakeCaptcha } from '@/services/open-job/api';
+import { login, getFakeImageCaptcha, getFakeSmsCaptcha} from '@/services/open-job/api';
 
 import styles from './index.less';
-import {arrayBufferToBase64} from "@/utils/utils";
 import {getDeviceId, setAccessToken} from "@/utils/cache";
 
 const LoginMessage: React.FC<{
@@ -47,8 +46,8 @@ const Login: React.FC = () => {
   const intl = useIntl();
 
   const onGetImageCaptcha = useCallback(async () => {
-    const result = await getFakeCaptcha({type:"image", deviceId: getDeviceId()});
-    if (result) setImageUrl(`data:image/jpeg;base64,${arrayBufferToBase64(result)}`)
+    const result = await getFakeImageCaptcha({deviceId: getDeviceId()});
+    if (result && result.success) setImageUrl(`data:image/jpeg;base64,${result.imageCode}`)
   }, []);
 
   const fetchUserInfo = async () => {
@@ -319,13 +318,10 @@ const Login: React.FC = () => {
                   ]}
                   phoneName="mobile"
                   onGetCaptcha={async (mobile) => {
-                    const result = await getFakeCaptcha({
-                      type: "sms", mobile, deviceId: getDeviceId()
-                    });
-                    if (result === false) {
-                      return;
+                    const result = await getFakeSmsCaptcha({mobile, deviceId: getDeviceId()});
+                    if (result && result.success) {
+                      message.success('短信验证码已发送！请注意查收');
                     }
-                    message.success('获取验证码成功！验证码为：1234');
                   }}
                 />
               </>

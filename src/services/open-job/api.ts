@@ -25,15 +25,21 @@ export async function outLogin() {
   });
 }
 
-
-/** 发送验证码 POST /validate/code/ */
-export async function getFakeCaptcha(params: Partial<API.CaptchaParams>) {
-  return request('/captcha/create', {
+export async function getFakeImageCaptcha(params: Partial<API.CaptchaParams>) {
+  return request('/captcha/create/image', {
     method: 'POST',
     data: {
       ...params,
-    },
-    responseType: 'blob'
+    }
+  });
+}
+
+export async function getFakeSmsCaptcha(params: Partial<API.CaptchaParams>) {
+  return request('/captcha/create/sms', {
+    method: 'POST',
+    data: {
+      ...params,
+    }
   });
 }
 
