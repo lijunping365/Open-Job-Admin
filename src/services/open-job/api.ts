@@ -91,7 +91,9 @@ export async function fetchInstancePage(
     /** 页面的容量 */
     pageSize?: number;
     /** 实例id */
-    clientId?: any
+    clientId?: any;
+    /** 应用id */
+    appId?: any;
     /** 实例状态 */
     status?: number
   }
@@ -234,5 +236,47 @@ export async function validateCronExpress(cronExpress: string) {
     params: {
       cronExpress,
     },
+  });
+}
+
+export async function fetchOpenJobAppPage(
+  params: {
+    // query
+    /** 当前的页码 */
+    current?: number;
+    /** 页面的容量 */
+    pageSize?: number;
+    /** 爬虫id */
+    spiderId?: any
+    /** 任务状态 */
+    status?: number
+  }
+) {
+  return request('/app/page', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function updateOpenJobApp(params: Partial<API.OpenJob>) {
+  return request('/app/update', {
+    method: 'PUT',
+    data: {...params}
+  });
+}
+
+export async function addOpenJobApp(params: Partial<API.OpenJob>) {
+  return request('/app/save', {
+    method: 'POST',
+    data: {...params}
+  });
+}
+
+export async function removeOpenJobApp(params: {ids: number[]}) {
+  return request('/app/delete', {
+    method: 'DELETE',
+    data: {...params}
   });
 }

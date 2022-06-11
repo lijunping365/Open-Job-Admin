@@ -39,8 +39,17 @@ declare namespace API {
     createTime: Date;
   };
 
+  type OpenJobApp = {
+    id: number;
+    appName: string;
+    appDesc: string;
+    createTime: Date;
+    createUser: number;
+  };
+
   type OpenJob = {
     id: number;
+    appId: number;
     jobName: string;
     handlerName: string;
     cronExpression: string;

@@ -6,6 +6,7 @@ import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import {confirmModal} from "@/components/ConfirmModel";
 import { fetchInstancePage, updateInstance, offline, online } from '@/services/open-job/api';
+import type {RouteChildrenProps} from "react-router";
 
 /**
  * 更新节点
@@ -62,10 +63,11 @@ const handlerChange = async (clientId: string) => {
   }
 };
 
-const TableList: React.FC = () => {
+const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   /** 分布更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
-
+  const { query }: any = location;
+  const [appId] = useState<number>(query? query.id : 0);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.Instance>();
   const columns: ProColumns<API.Instance>[] = [
@@ -140,7 +142,7 @@ const TableList: React.FC = () => {
         }}
         toolBarRender={() => []}
         request={async (params) => {
-          const response = await fetchInstancePage({ ...params });
+          const response = await fetchInstancePage({ ...params, appId });
           return {
             data: response.records,
             total: response.total,

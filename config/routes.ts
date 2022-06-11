@@ -19,10 +19,16 @@
     component: './dashboard',
   },
   {
-    name: 'openJob',
+    name: 'app',
     icon: 'table',
-    path: '/openJob',
-    component: './openJob',
+    path: '/app',
+    component: './app',
+  },
+  {
+    name: 'job',
+    icon: 'table',
+    path: '/job',
+    component: './job',
   },
   {
     name: 'logger',
@@ -36,6 +42,7 @@
     icon: 'table',
     path: '/executor',
     component: './executor',
+    hideInMenu: true,
   },
   {
     name: 'admin',
