@@ -43,11 +43,6 @@ export const requestInterceptor: RequestInterceptor = (url, options) => {
 export const responseInterceptor: ResponseInterceptor = async (response, options) => {
   if (response && response.status) {
     if (response.status === 200) {
-      // 处理图片验证码
-      if (response.url.includes('/captcha/create') && options.data.type === "image") {
-        return response.clone().arrayBuffer();
-      }
-
       const result: any = await response.clone().json();
       if (result && result.code === 200) {
         return result.data;
