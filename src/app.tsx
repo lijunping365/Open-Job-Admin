@@ -7,6 +7,8 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/open-job/api';
 import {requestInterceptor, responseInterceptor} from "@/utils/request";
+import {ignorePath} from "@/utils/utils";
+import defaultSettings from "../config/defaultSettings";
 
 const loginPath = '/login';
 
@@ -21,37 +23,26 @@ export const initialStateConfig = {
 export async function getInitialState(): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
-  const fetchUserInfo = async () => {
+  if (ignorePath()) {
     try {
-      return await queryCurrentUser();
+      const currentUser: any = await queryCurrentUser();
+      return {
+        currentUser,
+        settings: defaultSettings,
+      };
     } catch (error) {
       history.push(loginPath);
     }
-    return undefined;
-  };
-  // 如果是登录页面，不执行
-  if (history.location.pathname !== loginPath) {
-    const currentUser = await fetchUserInfo();
-    return {
-      fetchUserInfo,
-      currentUser,
-      settings: {},
-    };
   }
   return {
-    fetchUserInfo,
-    settings: {},
+    settings: defaultSettings,
   };
 }
 
-export const request: RequestConfig = {
-  requestInterceptors: [requestInterceptor],
-  responseInterceptors: [responseInterceptor]
-};
-
-// ProLayout 支持的api https://procomponents.ant.design/components/layout
+/**
+ * ProLayout 支持的api https://procomponents.ant.design/components/layout
+ */
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
     rightContentRender: () => <RightContent />,
@@ -61,9 +52,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
-      const { location } = history;
-      // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!initialState?.currentUser && !ignorePath()) {
         history.push(loginPath);
       }
     },
@@ -72,4 +61,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState }) => {
     // unAccessible: <div>unAccessible</div>,
     ...initialState?.settings,
   };
+};
+
+export const request: RequestConfig = {
+  requestInterceptors: [requestInterceptor],
+  responseInterceptors: [responseInterceptor]
 };
