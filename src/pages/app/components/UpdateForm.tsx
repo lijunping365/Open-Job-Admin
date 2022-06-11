@@ -1,16 +1,13 @@
-import React, {useState} from 'react';
-import {Form, Button, Input, Modal, Row, Col, message} from 'antd';
-import CronModal from "@/components/CronModel";
-import {validateCronExpress} from "@/services/open-job/api";
+import React from 'react';
+import {Form, Button, Input, Modal} from 'antd';
 
 export interface UpdateFormProps {
   onCancel: (flag?: boolean, formVals?: Partial<API.OpenJob>) => void;
   onSubmit: (values: Partial<API.OpenJob>) => void;
   updateModalVisible: boolean;
-  values: Partial<API.OpenJob>;
+  values: Partial<API.OpenJobApp>;
 }
 const FormItem = Form.Item;
-const { TextArea } = Input;
 
 const formLayout = {
   labelCol: { span: 7 },
@@ -25,24 +22,12 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     updateModalVisible,
     values,
   } = props;
-  const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
-  const [cronExpressValue, setCronExpressValue] = useState<any>(values.cronExpression);
 
   const handleSave = async () => {
     const fieldsValue: any = await form.validateFields();
-    if(!cronExpressValue || cronExpressValue.length === 0){
-      message.error("cron 表达式不能为空");
-      return;
-    }
-    const result = await validateCronExpress(cronExpressValue);
-    if(!result || result !== 'success'){
-      message.error("cron 校验失败，请重新输入");
-      return;
-    }
     handleUpdate({
       ...values,
-      ...fieldsValue,
-      cronExpression: cronExpressValue
+      ...fieldsValue
     });
   };
 
@@ -59,10 +44,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
 
   return (
     <Modal
-      width={900}
+      width={600}
       bodyStyle={{ padding: '32px 40px 48px' }}
       destroyOnClose
-      title="编辑调度任务"
+      title="编辑应用"
       visible={updateModalVisible}
       footer={renderFooter()}
       onCancel={() => handleUpdateModalVisible()}
@@ -72,69 +57,24 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         form={form}
         initialValues={{
           id: values.id,
-          jobName: values.jobName,
-          handlerName: values.handlerName,
-          params: values.params,
+          appName: values.appName,
+          appDesc: values.appDesc
         }}
       >
-        <Row>
-          <Col span={12}>
-            <FormItem
-              name="jobName"
-              label="任务名称"
-              rules={[{ required: true, message: '请输入任务名称！' }]}
-            >
-              <Input placeholder="请输入任务名称" />
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              name="handlerName"
-              label="handlerName"
-              rules={[{ required: true, message: '请输入handlerName！' }]}
-            >
-              <Input placeholder="请输入handlerName" />
-            </FormItem>
-          </Col>
-        </Row>
-
-        <Row>
-          <Col span={12}>
-            <FormItem
-              name="params"
-              label="任务参数"
-            >
-              <TextArea rows={4}  placeholder="请输入任务参数（json 格式）" />
-            </FormItem>
-          </Col>
-          <Col span={12}>
-            <FormItem
-              name="cronExpression"
-              label="Cron 表达式"
-            >
-              <Input.Group compact style={{display: 'flex'}}>
-                <Input placeholder="请输入Cron 表达式"  value={cronExpressValue} onChange={(e)=>setCronExpressValue(e.target.value)}/>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    handleCronModalVisible(true);
-                  }}
-                >
-                  Cron 工具
-                </Button>
-              </Input.Group>
-            </FormItem>
-          </Col>
-        </Row>
-
-        <CronModal
-          modalVisible={cronModalVisible}
-          onCancel={() => handleCronModalVisible(false)}
-          onSubmit={(value)=>{
-            setCronExpressValue(value);
-            handleCronModalVisible(false);
-          }}
-        />
+        <FormItem
+          name="appName"
+          label="应用名称"
+          rules={[{ required: true, message: '请输入应用名称！' }]}
+        >
+          <Input placeholder="请输入应用名称" />
+        </FormItem>
+        <FormItem
+          name="appDesc"
+          label="应用描述"
+          rules={[{ required: true, message: '请输入应用描述！' }]}
+        >
+          <Input placeholder="请输入应用描述" />
+        </FormItem>
       </Form>
     </Modal>
   );
