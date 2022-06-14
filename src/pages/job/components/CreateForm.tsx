@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
-import {Button, Col, Form, Input, message, Modal, Row} from 'antd';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Button, Col, Form, Input, message, Modal, Row, Select} from 'antd';
 import CronModal from "@/components/CronModel";
-import {validateCronExpress} from "@/services/open-job/api";
+import {fetchOpenJobAppList, validateCronExpress} from "@/services/open-job/api";
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -11,6 +11,7 @@ interface CreateFormProps {
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
+const { Option } = Select;
 
 const formLayout = {
   labelCol: { span: 7 },
@@ -21,6 +22,8 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
   /** 新建窗口的弹窗 */
   const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
   const [cronExpressValue, setCronExpressValue] = useState<string>();
+  const [openJobAppOptions, setOpenJobAppOptions] = useState<React.ReactNode[]>([]);
+  const [appId, setAppId] = useState();
   const [form] = Form.useForm();
 
   const {
@@ -28,6 +31,24 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     onSubmit: handleCreate,
     onCancel: handleCreateModalVisible,
   } = props;
+
+  const onFetchOpenJobAppList = useCallback(async () => {
+    const result: API.OpenJobApp[] = await fetchOpenJobAppList();
+    if (result){
+      const options = result.map(app=>{
+        return <Option value={app.id}>{app.appName}</Option>
+      });
+      setOpenJobAppOptions(options);
+    }
+  }, []);
+
+  useEffect(()=>{
+    onFetchOpenJobAppList().then();
+  },[]);
+
+  const handleSelectMethod = (op: any) => {
+    setAppId(op);
+  };
 
   const handleFinish = async () => {
     const fieldsValue: any = await form.validateFields();
@@ -95,10 +116,20 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         <Row>
           <Col span={12}>
             <FormItem
-              name="params"
-              label="任务参数"
+              name="appId"
+              label="选择应用"
+              hasFeedback
+              rules={[{ required: true, message: '请选择应用!' }]}
             >
-              <TextArea rows={4}  placeholder="请输入任务参数（json 格式）" />
+              <Select
+                showSearch
+                onChange={handleSelectMethod}
+                filterOption={(inputValue, option) =>
+                  option!.children.indexOf(inputValue) !== -1
+                }
+              >
+                {openJobAppOptions}
+              </Select>
             </FormItem>
           </Col>
           <Col span={12}>
@@ -117,6 +148,17 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
                   Cron 工具
                 </Button>
               </Input.Group>
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="params"
+              label="任务参数"
+            >
+              <TextArea rows={4}  placeholder="请输入任务参数（json 格式）" />
             </FormItem>
           </Col>
         </Row>

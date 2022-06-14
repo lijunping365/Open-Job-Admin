@@ -1,11 +1,19 @@
 import { PlusOutlined } from '@ant-design/icons';
 import {Button, message, Divider} from 'antd';
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useCallback, useEffect} from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import { fetchScheduleTaskPage, addScheduleTask, updateScheduleTask, removeScheduleTask, startScheduleTask, stopScheduleTask } from '@/services/open-job/api';
+import {
+  fetchScheduleTaskPage,
+  addScheduleTask,
+  updateScheduleTask,
+  removeScheduleTask,
+  startScheduleTask,
+  stopScheduleTask,
+  fetchOpenJobAppList
+} from '@/services/open-job/api';
 import {confirmModal} from "@/components/ConfirmModel";
 import CreateForm from "./components/CreateForm";
 import {Link} from "@umijs/preset-dumi/lib/theme";
@@ -115,10 +123,20 @@ const TableList: React.FC = () => {
   /** 分布更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
+  const [openJobAppList, setOpenJobAppList] = useState([]);
 
   const actionRef = useRef<ActionType>();
   // const [currentRow, setCurrentRow] = useState<ScheduleTask>();
   const [selectedRowsState, setSelectedRows] = useState<API.OpenJob[]>([]);
+
+  const onFetchOpenJobAppList = useCallback(async () => {
+    const result = await fetchOpenJobAppList();
+    setOpenJobAppList(result);
+  }, []);
+
+  useEffect(()=>{
+    onFetchOpenJobAppList().then();
+  },[]);
 
   const columns: ProColumns<API.OpenJob>[] = [
     {

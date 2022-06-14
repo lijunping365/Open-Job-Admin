@@ -280,3 +280,10 @@ export async function removeOpenJobApp(params: {ids: number[]}) {
     data: {...params}
   });
 }
+
+export async function fetchOpenJobAppList(appName?: string) {
+  return request('/app/list', {
+    method: 'GET',
+    params: {appName}
+  });
+}
