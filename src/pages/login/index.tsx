@@ -29,8 +29,13 @@ const Login: React.FC = () => {
   const intl = useIntl();
 
   const onGetImageCaptcha = useCallback(async () => {
-    const result = await getFakeImageCaptcha({deviceId: getDeviceId()});
-    if (result && result.success) setImageUrl(`data:image/jpeg;base64,${result.imageCode}`)
+    getFakeImageCaptcha({ deviceId: getDeviceId() })
+      .then((result) => {
+        if (result && result.success) setImageUrl(`data:image/jpeg;base64,${result.imageCode}`);
+      })
+      .catch((error) => {
+        message.success(`获取验证码失败:${error}`);
+      });
   }, []);
 
   useEffect(()=>{
