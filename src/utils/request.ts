@@ -48,10 +48,6 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
         return result.data;
       }
 
-      if (result && result.code === 400) { // 参数校验失败
-        notification.error({message: result.msg});
-      }
-
       if (result && result.code === 401 && ignorePath()) {
         history.push('/login');
       }
@@ -68,7 +64,7 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
         history.push('/500');
       }
 
-      return result;
+      throw new Error(result ? result.msg : '服务出异常了');
     }
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
