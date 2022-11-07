@@ -54,9 +54,11 @@ const Login: React.FC = () => {
           goto();
           refresh().then();
         }
-      }).catch((reason)=>{
-      message.success(`登录失败:${reason}`);
-    });
+      })
+      .catch((reason)=>{
+        message.success(`登录失败:${reason}`);
+      }
+    );
     setSubmitting(false);
   };
 
