@@ -1,7 +1,7 @@
 import type {RequestInterceptor, ResponseInterceptor} from 'umi-request';
 import { history } from 'umi';
 import {getAccessToken} from '@/utils/cache';
-import { notification } from 'antd';
+import {message, notification} from 'antd';
 import { HTTP_URL } from '../../config/env.config';
 import {ignorePath} from "@/utils/utils";
 
@@ -44,34 +44,23 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
   if (response && response.status) {
     if (response.status === 200) {
       const result: any = await response.clone().json();
-      if (result && result.code === 200) {
+      if (result.code === 200) {
         return result.data;
       }
 
-      if (result && result.code === 401 && ignorePath()) {
+      if (result.code === 401 && ignorePath()) {
         history.push('/login');
       }
 
-      if (result && result.code === 403) {
-        history.push('/403');
-      }
-
-      if (result && result.code === 404) {
-        history.push('/404');
-      }
-
-      if (result && result.code === 500) {
-        history.push('/500');
-      }
-
-      throw new Error(result ? result.msg : '服务出异常了');
+      message.error(result.msg);
+    } else {
+      const errorText = codeMessage[response.status] || response.statusText;
+      const { status, url } = response;
+      notification.error({
+        message: `请求错误 ${status}: ${url}`,
+        description: errorText,
+      });
     }
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
   } else {
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
