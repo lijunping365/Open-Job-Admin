@@ -33,7 +33,6 @@ export const requestInterceptor: RequestInterceptor = (url, options) => {
 
   // 当返回 data 的值为 null 时会走 errorHandle
   o.skipErrorHandler = true;
-  console.log("当前发出的请求是", `${HTTP_URL}${url}`)
   return {
     url: `${HTTP_URL}${url}`,
     options: o,
