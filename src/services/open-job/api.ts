@@ -1,5 +1,5 @@
 import { request } from 'umi';
-import {getAccessToken} from "@/utils/cache";
+import {getAccessToken, getRefreshToken} from "@/utils/cache";
 
 /** 获取当前的用户 GET /user/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
@@ -22,6 +22,14 @@ export async function outLogin() {
   return request('/login/outLogin', {
     method: 'GET',
     params: {accessToken: getAccessToken()}
+  });
+}
+
+/** 退出登录接口 GET /login/refreshToken */
+export async function refreshToken() {
+  return request('/login/refreshToken', {
+    method: 'GET',
+    params: {refreshToken: getRefreshToken()}
   });
 }
 

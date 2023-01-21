@@ -1,9 +1,10 @@
 import type {RequestInterceptor, ResponseInterceptor} from 'umi-request';
 import { history } from 'umi';
-import {getAccessToken} from '@/utils/cache';
+import {getAccessToken, getRefreshToken, setAccessToken, setRefreshToken} from '@/utils/cache';
 import {message, notification} from 'antd';
 import { HTTP_URL } from '../../config/env.config';
 import {ignorePath} from "@/utils/utils";
+import {refreshToken} from "@/services/open-job/api";
 
 export const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -24,6 +25,13 @@ export const codeMessage = {
   504: '网关超时。',
 };
 
+export const tryRefreshToken = ()=>{
+  refreshToken().then(res => {
+    setAccessToken(res.accessToken);
+    setRefreshToken(res.refreshToken);
+  }).catch(()=>history.push('/login'));
+}
+
 export const requestInterceptor: RequestInterceptor = (url, options) => {
   const o: any = options;
   o.headers = {
@@ -39,6 +47,8 @@ export const requestInterceptor: RequestInterceptor = (url, options) => {
   };
 };
 
+
+
 export const responseInterceptor: ResponseInterceptor = async (response, options) => {
   if (response && response.status) {
     if (response.status === 200) {
@@ -48,7 +58,11 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
       }
 
       if (result.code === 401 && ignorePath()) {
-        history.push('/login');
+        if (getRefreshToken()){
+          tryRefreshToken();
+        }else {
+          history.push('/login');
+        }
       }
 
       message.error(result.msg);

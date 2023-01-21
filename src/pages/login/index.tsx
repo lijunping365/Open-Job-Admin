@@ -10,7 +10,7 @@ import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from '
 import Footer from '@/components/Footer';
 import { login, getFakeImageCaptcha, getFakeSmsCaptcha} from '@/services/open-job/api';
 import styles from './index.less';
-import {getDeviceId, setAccessToken} from "@/utils/cache";
+import {getDeviceId, setAccessToken, setRefreshToken} from "@/utils/cache";
 
 /** 此方法会跳转到 redirect 参数所在的位置 */
 const goto = () => {
@@ -50,6 +50,7 @@ const Login: React.FC = () => {
       .then((res)=>{
         if (res) {
           setAccessToken(res.accessToken);
+          setRefreshToken(res.refreshToken);
           message.success("登录成功！");
           goto();
           refresh().then();
