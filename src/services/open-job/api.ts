@@ -26,7 +26,7 @@ export async function outLogin() {
 }
 
 /** 退出登录接口 GET /login/refreshToken */
-export async function refreshToken() {
+export async function tryRefreshToken() {
   return request('/login/refreshToken', {
     method: 'GET',
     params: {refreshToken: getRefreshToken()}
