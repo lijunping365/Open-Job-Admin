@@ -45,10 +45,10 @@
     hideInMenu: true,
   },
   {
-    name: 'admin',
+    name: 'user',
     icon: 'table',
-    path: '/admin',
-    component: './admin',
+    path: '/user',
+    component: './user',
   },
   {
     path: '/',
