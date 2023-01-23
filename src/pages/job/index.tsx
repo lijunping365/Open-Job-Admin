@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import {Button, message, Divider} from 'antd';
-import React, {useState, useRef, useCallback, useEffect} from 'react';
+import React, {useState, useRef} from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
@@ -47,7 +47,6 @@ const handleUpdate = async (fields: Partial<API.OpenJob>) => {
   try {
     await updateScheduleTask(fields);
     hide();
-
     message.success('配置成功');
     return true;
   } catch (error) {
@@ -120,23 +119,11 @@ const handleStop = async (jobId: number) => {
 const TableList: React.FC = () => {
   /** 新建窗口的弹窗 */
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
-  /** 分布更新窗口的弹窗 */
+  /** 更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
-  const [openJobAppList, setOpenJobAppList] = useState([]);
-
   const actionRef = useRef<ActionType>();
-  // const [currentRow, setCurrentRow] = useState<ScheduleTask>();
   const [selectedRowsState, setSelectedRows] = useState<API.OpenJob[]>([]);
-
-  const onFetchOpenJobAppList = useCallback(async () => {
-    const result = await fetchOpenJobAppList();
-    setOpenJobAppList(result);
-  }, []);
-
-  useEffect(()=>{
-    onFetchOpenJobAppList().then();
-  },[]);
 
   const columns: ProColumns<API.OpenJob>[] = [
     {
@@ -144,6 +131,13 @@ const TableList: React.FC = () => {
       dataIndex: 'id',
       valueType: 'text',
       search: false,
+    },
+    {
+      title: '应用编号',
+      dataIndex: 'appId',
+      valueType: 'select',
+      hideInTable: true,
+      request: async () => await fetchOpenJobAppList(),
     },
     {
       title: '任务名称',
@@ -310,6 +304,7 @@ const TableList: React.FC = () => {
         onCancel={() => handleCreateModalVisible(false)}
         modalVisible={createModalVisible}>
       </CreateForm>
+
       {updateFormValues && Object.keys(updateFormValues).length ? (
         <UpdateForm
           onSubmit={async (value) => {

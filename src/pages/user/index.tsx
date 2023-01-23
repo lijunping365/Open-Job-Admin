@@ -78,8 +78,8 @@ const TableList: React.FC = () => {
       title: '状态',
       dataIndex: 'status',
       valueEnum: {
-        0: { text: '禁用', status: 'Error' },
-        1: { text: '启用', status: 'Success' },
+        0: { text: '启用', status: 'Success'},
+        1: { text: '禁用', status: 'Error' },
       },
     },
     {

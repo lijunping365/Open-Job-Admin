@@ -58,7 +58,8 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
     }
     handleCreate({
       ...fieldsValue,
-      cronExpression: cronExpressValue
+      cronExpression: cronExpressValue,
+      appId,
     });
   };
 
