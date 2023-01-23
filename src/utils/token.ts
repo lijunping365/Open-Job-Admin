@@ -1,20 +1,18 @@
 import { request } from 'umi';
 import { setAccessToken, setRefreshToken } from '@/utils/cache';
-import { RequestOptionsInit } from 'umi-request';
+import type { RequestOptionsInit } from 'umi-request';
 import {HTTP_URL} from "../../config/env.config";
 import {tryRefreshToken} from "@/services/open-job/api";
 
 export const refreshToken = () => {
   return new Promise((resolve, reject) => {
-    tryRefreshToken()
-      .then((res: any) => {
-        if (res) {
+    tryRefreshToken().then((res: any) => {
+        if (res && res.refreshToken) {
           setAccessToken(res.accessToken);
           setRefreshToken(res.refreshToken);
           resolve(res);
         }
-      })
-      .catch(() => {
+      }).catch(() => {
         reject();
       });
   });

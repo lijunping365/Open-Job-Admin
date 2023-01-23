@@ -1,4 +1,4 @@
-import type {RequestInterceptor, ResponseInterceptor} from 'umi-request';
+import type {RequestInterceptor, RequestOptionsInit, ResponseInterceptor} from 'umi-request';
 import { history } from 'umi';
 import {getAccessToken, getRefreshToken} from '@/utils/cache';
 import {message, notification} from 'antd';
@@ -25,6 +25,18 @@ export const codeMessage = {
   504: '网关超时。',
 };
 
+export const handler401 = (response: Response, options: RequestOptionsInit) =>{
+  // 如果 url 不包含 login/refreshToken 说明是 access_token 过期，则刷新 token，否则就是 refresh_token 过期了，应该重新登录了。
+  if (getRefreshToken() && response.url.indexOf('login/refreshToken') === -1) {
+    return onRefreshToken(response, options);
+  }
+  // 否则可能就是未登录或 refresh_token 过期抛出 401， 所以要重新登录
+  if (ignorePath()){
+    history.push('/login');
+  }
+  return null;
+}
+
 export const requestInterceptor: RequestInterceptor = (url, options) => {
   const o: any = options;
   o.headers = {
@@ -44,21 +56,20 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
   if (response && response.status) {
     if (response.status === 200) {
       const result: any = await response.clone().json();
+      // 处理业务正常状态码
       if (result.code === 200) {
         return result.data;
       }
 
-      if (result.code === 401 && ignorePath()) {
-        // access_token 过期 和 refresh_token 过期都会抛出 401 异常，url 包含 oauth/token 说明就是 refresh_token 过期了。
-        // 如果是 access_token 过期，则刷新 token
-        if (getRefreshToken() && response.url.indexOf('login/refreshToken') === -1) {
-          return onRefreshToken(response, options);
-        }
-        // 否则可能就是未登录或 refresh_token 过期抛出 401， 所以要重新登录
-        history.push('/login');
+      // 处理 access_token 非法或过期 和 refresh_token 非法或过期过期
+      if (result.code === 401) {
+        handler401(response, options);
       }
 
-      message.error(result.msg);
+      // 处理业务异常状态码
+      if (result.code === 1000){
+        message.error(result.msg);
+      }
     } else {
       const errorText = codeMessage[response.status] || response.statusText;
       const { status, url } = response;
