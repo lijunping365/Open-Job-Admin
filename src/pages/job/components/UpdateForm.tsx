@@ -9,8 +9,10 @@ export interface UpdateFormProps {
   updateModalVisible: boolean;
   values: Partial<API.OpenJob>;
 }
+
 const FormItem = Form.Item;
 const { TextArea } = Input;
+const { Option } = Select;
 
 const formLayout = {
   labelCol: { span: 7 },
@@ -26,7 +28,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   } = props;
 
   const [form] = Form.useForm();
-  const [appId, setAppId] = useState();
   const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
   const [cronExpressValue, setCronExpressValue] = useState<any>(values.cronExpression);
   const [openJobAppOptions, setOpenJobAppOptions] = useState<React.ReactNode[]>([]);
@@ -44,10 +45,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   useEffect(()=>{
     onFetchOpenJobAppList().then();
   },[]);
-
-  const handleSelectMethod = (op: any) => {
-    setAppId(op);
-  };
 
   const handleSave = async () => {
     const fieldsValue: any = await form.validateFields();
@@ -93,6 +90,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         form={form}
         initialValues={{
           id: values.id,
+          appId: values.appId,
           jobName: values.jobName,
           handlerName: values.handlerName,
           params: values.params,
@@ -129,7 +127,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             >
               <Select
                 showSearch
-                onChange={handleSelectMethod}
                 filterOption={(inputValue, option) =>
                   option!.children.indexOf(inputValue) !== -1
                 }
