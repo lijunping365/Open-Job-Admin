@@ -1,18 +1,18 @@
-import { PlusOutlined } from '@ant-design/icons';
-import {Button, message, Divider} from 'antd';
-import React, {useState, useRef} from 'react';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
-import type { ProColumns, ActionType } from '@ant-design/pro-table';
+import {PlusOutlined} from '@ant-design/icons';
+import {Button, Divider, message} from 'antd';
+import React, {useRef, useState} from 'react';
+import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
+import type {ActionType, ProColumns} from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import {
-  fetchScheduleTaskPage,
   addScheduleTask,
-  updateScheduleTask,
+  fetchOpenJobAppList,
+  fetchScheduleTaskPage,
   removeScheduleTask,
   startScheduleTask,
   stopScheduleTask,
-  fetchOpenJobAppList
+  updateScheduleTask
 } from '@/services/open-job/api';
 import {confirmModal} from "@/components/ConfirmModel";
 import CreateForm from "./components/CreateForm";
@@ -133,11 +133,19 @@ const TableList: React.FC = () => {
       search: false,
     },
     {
-      title: '应用编号',
+      title: '应用名称',
       dataIndex: 'appId',
       valueType: 'select',
       hideInTable: true,
-      request: async () => await fetchOpenJobAppList(),
+      request: async () => {
+        const res = await fetchOpenJobAppList();
+        if (res){
+          return res.map((item: any) => {
+            return {"label": item.appName, "value": item.id}
+          });
+        }
+        return null;
+      },
     },
     {
       title: '任务名称',
