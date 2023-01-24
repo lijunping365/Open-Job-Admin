@@ -3,8 +3,11 @@ import { PageContainer } from '@ant-design/pro-layout';
 import {Card, Col, Row, Statistic} from "antd";
 import { Chart, Axis, Geom, Legend, Tooltip, LineAdvance } from 'bizcharts';
 import {fetchSpiderNumber, fetchSpiderReport} from "@/services/open-job/api";
+import type {RouteChildrenProps} from "react-router";
 
-const TableList: React.FC = () => {
+const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
+  const { query }: any = location;
+  const [appId] = useState<number>(query? query.id : 1);
   const [loading, setLoading] = useState<boolean>(true);
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
   const [statisticReport, setStatisticReport] = useState<API.StatisticReport[]>([]);
@@ -22,9 +25,9 @@ const TableList: React.FC = () => {
   const cols = {  sold: { alias: '销售量' },  genre: { alias: '游戏种类' }};
 
   const onFetchStatisticData = useCallback(async () => {
-    const result = await fetchSpiderNumber();
+    const result = await fetchSpiderNumber(appId);
     setStatisticNumber(result);
-    const report = await fetchSpiderReport();
+    const report = await fetchSpiderReport(appId);
     setStatisticReport(report);
   }, []);
 

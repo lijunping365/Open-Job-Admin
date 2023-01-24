@@ -226,15 +226,21 @@ export async function nextTriggerTime(cronExpress: string) {
   });
 }
 
-export async function fetchSpiderNumber() {
-  return request('/statistic/number', {
+export async function fetchSpiderNumber(appId: number) {
+  return request('/analysis/statistic', {
     method: 'GET',
+    params: {
+      appId,
+    },
   });
 }
 
-export async function fetchSpiderReport() {
-  return request('/statistic/report', {
+export async function fetchSpiderReport(appId: number) {
+  return request('/analysis/chart', {
     method: 'GET',
+    params: {
+      appId,
+    },
   });
 }
 

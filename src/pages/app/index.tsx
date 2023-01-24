@@ -72,14 +72,11 @@ const handleRemove = async (selectedRows: any[]) => {
 const TableList: React.FC = () => {
   /** 新建窗口的弹窗 */
   const [createModalVisible, handleCreateModalVisible] = useState<boolean>(false);
-  /** 分布更新窗口的弹窗 */
+  /** 更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [updateFormValues, setUpdateFormValues] = useState({});
-
   const actionRef = useRef<ActionType>();
-  // const [currentRow, setCurrentRow] = useState<ScheduleTask>();
   const [selectedRowsState, setSelectedRows] = useState<API.OpenJobApp[]>([]);
-
   const columns: ProColumns<API.OpenJobApp>[] = [
     {
       title: '应用编号',
@@ -138,16 +135,27 @@ const TableList: React.FC = () => {
             删除
           </a>
           <Divider type="vertical" />
-            <Link
-              to={{
-                pathname: '/executor',
-                search: `?id=${record.id}`,
-                hash: '#the-hash',
-                state: { fromDashboard: true },
-              }}
-            >
-              查看节点
-            </Link>
+          <Link
+            to={{
+              pathname: '/executor',
+              search: `?id=${record.id}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
+            }}
+          >
+            实例管理
+          </Link>
+          <Divider type="vertical" />
+          <Link
+            to={{
+              pathname: '/dashboard',
+              search: `?id=${record.id}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
+            }}
+          >
+            运行监控
+          </Link>
         </>
       ),
     },

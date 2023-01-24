@@ -67,7 +67,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   /** 分布更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const { query }: any = location;
-  const [appId] = useState<number>(query? query.id : 0);
+  const [appId] = useState<number>(query? query.id : 1);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.Instance>();
   const columns: ProColumns<API.Instance>[] = [
