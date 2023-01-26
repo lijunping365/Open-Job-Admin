@@ -3,7 +3,8 @@ import {Divider, Form, Input, List, message, Modal, Typography} from 'antd';
 import CronComponent from "./CronComponent";
 import { nextTriggerTime } from '@/services/open-job/api';
 
-interface CronModalProps {
+export interface CronModalProps {
+  cronExpressValue: string;
   modalVisible: boolean;
   onCancel: (flag?: boolean) => void;
   onSubmit: (value: string) => void;
@@ -33,26 +34,26 @@ const formLayout = {
 const CronModal: React.FC<CronModalProps> = (props) => {
   const {
     modalVisible,
+    cronExpressValue,
     onSubmit: handleCronExpressValue,
     onCancel: handleCronModalVisible,
   } = props;
 
   const [form] = Form.useForm();
-  const [inputValue, setInputValue] = React.useState("* * * * * ? *");
+  const [inputValue, setInputValue] = React.useState<string>(cronExpressValue);
   const [errMsg, setErrMsg] = React.useState<string>();
   const [nextTimeList, setNextTimeList] = React.useState<string[]>([]);
 
   const handlerChange = (value: string) => {
-    nextTriggerTime(value).then((res: string[]) => {
-      if(res && res.length === 5){
-        setErrMsg("");
+    nextTriggerTime(value).then((res) => {
+      if (res.errMsg){
+        setErrMsg(res.errMsg);
+      }else {
         setNextTimeList(res);
         setInputValue(value);
         form.setFieldsValue({
           cronExpression: value,
         });
-      }else{
-        setErrMsg(res[0]);
       }
     }).catch(() => {
       message.error('获取下次执行时间失败，请重试');
@@ -60,10 +61,13 @@ const CronModal: React.FC<CronModalProps> = (props) => {
   }
 
   useEffect(()=>{
+    form.resetFields();
+
     if (!modalVisible){
       return;
     }
-    handlerChange(inputValue);
+
+    handlerChange(cronExpressValue);
   },[modalVisible]);
 
   const handleFinish = async () => {
@@ -81,7 +85,6 @@ const CronModal: React.FC<CronModalProps> = (props) => {
 
   return (
     <Modal
-      destroyOnClose
       title="Cron 工具"
       width={640}
       visible={modalVisible}
@@ -91,6 +94,9 @@ const CronModal: React.FC<CronModalProps> = (props) => {
       <Form
         {...formLayout}
         form={form}
+        initialValues={{
+          cronExpression: cronExpressValue
+        }}
       >
         <FormItem
           name="cronExpression"
