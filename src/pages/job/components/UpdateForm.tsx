@@ -53,8 +53,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       return;
     }
     const result = await validateCronExpress(cronExpressValue);
-    if(!result || result !== 'success'){
-      message.error("cron 校验失败，请重新输入");
+    if(!result){
       return;
     }
     handleUpdate({
@@ -138,7 +137,6 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           <Col span={12}>
             <FormItem
               name="cronExpression"
-              rules={[{ required: true, message: '请输入Cron 表达式！' }]}
               label="Cron 表达式"
             >
               <Input.Group compact style={{display: 'flex'}}>

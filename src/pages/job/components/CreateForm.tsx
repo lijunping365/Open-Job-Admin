@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Col, Form, Input, message, Modal, Row, Select} from 'antd';
 import CronModal from "@/components/CronModel";
-import {fetchOpenJobAppList} from "@/services/open-job/api";
+import {fetchOpenJobAppList, validateCronExpress} from "@/services/open-job/api";
 
 interface CreateFormProps {
   modalVisible: boolean;
@@ -52,8 +52,12 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
 
   const handleFinish = async () => {
     const fieldsValue: any = await form.validateFields();
-    if(!cronExpressValue){
+    if(!cronExpressValue || cronExpressValue.length === 0){
       message.error("cron 表达式不能为空");
+      return;
+    }
+    const result = await validateCronExpress(cronExpressValue);
+    if(!result){
       return;
     }
     handleCreate({
@@ -131,7 +135,6 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           <Col span={12}>
             <FormItem
               name="cronExpression"
-              rules={[{ required: true, message: '请输入Cron 表达式！' }]}
               label="Cron 表达式"
             >
               <Input.Group compact style={{display: 'flex'}}>
