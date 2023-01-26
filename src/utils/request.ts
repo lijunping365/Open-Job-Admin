@@ -56,35 +56,30 @@ export const responseInterceptor: ResponseInterceptor = async (response, options
   if (response && response.status) {
     if (response.status === 200) {
       const result: any = await response.clone().json();
-      // 处理业务正常状态码
-      if (result.code === 200) {
-        return result.data;
-      }
 
-      // 处理 access_token 非法或过期 和 refresh_token 非法或过期过期
-      if (result.code === 401) {
+      if (result.code === 401) { // 处理 access_token 非法或过期 和 refresh_token 非法或过期过期
         handler401(response, options);
       }
 
-      // 处理业务异常状态码
-      if (result.code === 1000){
+      if (result.code === 1000){ // 处理业务异常状态码
         message.error(result.msg);
       }
-    } else {
-      const errorText = codeMessage[response.status] || response.statusText;
-      const { status, url } = response;
-      notification.error({
-        message: `请求错误 ${status}: ${url}`,
-        description: errorText,
-      });
+
+      return result.data;
     }
+
+    const errorText = codeMessage[response.status] || response.statusText;
+    const { status, url } = response;
+    notification.error({
+      message: `请求错误 ${status}: ${url}`,
+      description: errorText,
+    });
   } else {
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
       message: '网络异常',
     });
   }
-  return response;
 };
 
 
