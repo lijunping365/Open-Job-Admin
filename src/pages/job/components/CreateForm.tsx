@@ -131,6 +131,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           <Col span={12}>
             <FormItem
               name="cronExpression"
+              rules={[{ required: true, message: '请输入Cron 表达式！' }]}
               label="Cron 表达式"
             >
               <Input.Group compact style={{display: 'flex'}}>
@@ -160,6 +161,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         </Row>
 
         <CronModal
+          cronExpressValue={cronExpressValue && cronExpressValue.length !== 0 ? cronExpressValue : "* * * * * ? *"}
           modalVisible={cronModalVisible}
           onCancel={() => handleCronModalVisible(false)}
           onSubmit={(value)=>{
