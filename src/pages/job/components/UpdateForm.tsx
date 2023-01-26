@@ -145,9 +145,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                 <Input placeholder="请输入Cron 表达式"  value={cronExpressValue} onChange={(e)=>setCronExpressValue(e.target.value)}/>
                 <Button
                   type="primary"
-                  onClick={() => {
-                    handleCronModalVisible(true);
-                  }}
+                  onClick={() => handleCronModalVisible(true)}
                 >
                   Cron 工具
                 </Button>
