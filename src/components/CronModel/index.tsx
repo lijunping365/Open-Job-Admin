@@ -49,7 +49,7 @@ const CronModal: React.FC<CronModalProps> = (props) => {
       if (res.errMsg){
         setErrMsg(res.errMsg);
       }else {
-        setNextTimeList(res);
+        setNextTimeList(res.times);
         setInputValue(value);
         form.setFieldsValue({
           cronExpression: value,
