@@ -6,6 +6,7 @@ import {
   AlertOutlined, ApiOutlined, ArrowUpOutlined, BarChartOutlined, BugOutlined,
   CoffeeOutlined, DashboardOutlined, DeploymentUnitOutlined,
 } from "@ant-design/icons";
+import Paragraph from "antd/es/typography/Paragraph";
 
 export default (): React.ReactNode => {
 
@@ -50,7 +51,7 @@ export default (): React.ReactNode => {
             rel="noopener noreferrer"
             target="__blank"
           >
-            欢迎使用
+            源码地址
           </a>
         </Typography.Text>
 
@@ -72,6 +73,40 @@ export default (): React.ReactNode => {
             </Card>
           </Col>
         </Row>
+
+        <Typography.Paragraph strong style={{margin: "20px 0"}}>
+          <Paragraph>
+            功能概览:
+          </Paragraph>
+
+          <Paragraph>
+              1. 定时任务基于 redis 实现，支持动态修改任务状态，同时支持拓展其他实现方式
+          </Paragraph>
+
+          <Paragraph>
+              2. 客户端与服务端通信采用 Grpc，同时支持 Netty
+          </Paragraph>
+
+          <Paragraph>
+              3. 注册中心支持 Nacos、Zookeeper，同时支持拓展其他注册中心，而且支持节点动态上线下线
+          </Paragraph>
+
+          <Paragraph>
+              4. 客户端集群部署支持负载均衡，默认提供了一致性hash、随机权重算法，支持多种容错机制，默认提供了失败重试、故障转移等机制，负载均衡和容错都支持拓展
+          </Paragraph>
+
+          <Paragraph>
+              5. 任务监控报警能力支持
+          </Paragraph>
+
+          <Paragraph>
+              6. 前后端分离，管理后台基于 antd-pro 搭建
+          </Paragraph>
+
+          <Paragraph>
+              7. 支持多应用任务调度
+          </Paragraph>
+        </Typography.Paragraph>
       </Card>
     </PageContainer>
   );
