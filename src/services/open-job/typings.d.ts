@@ -34,8 +34,10 @@ declare namespace API {
 
   type OpenJobLog = {
     id: number;
+    appId: number;
     jobId: number;
     status: number;
+    cause: string;
     createTime: Date;
   };
 

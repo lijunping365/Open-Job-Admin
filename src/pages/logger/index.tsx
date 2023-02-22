@@ -1,14 +1,13 @@
-import {Button, message, Divider} from 'antd';
+import {Button, message, Divider, Drawer} from 'antd';
 import React, {useState, useRef} from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
+import type {ProDescriptionsItemProps} from "@ant-design/pro-descriptions";
+import ProDescriptions from '@ant-design/pro-descriptions';
 import { fetchTaskLogPage, removeTaskLog} from '@/services/open-job/api';
 import {confirmModal} from "@/components/ConfirmModel";
-import {Link} from "@umijs/preset-dumi/lib/theme";
 import type {RouteChildrenProps} from "react-router";
-
-
 
 /**
  * 删除节点
@@ -35,6 +34,8 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const [selectedRowsState, setSelectedRows] = useState<API.OpenJobLog[]>([]);
   const { query }: any = location;
   const [jobId] = useState<number>(query? query.id : 0);
+  const [showDetail, setShowDetail] = useState<boolean>(false);
+  const [currentRow, setCurrentRow] = useState<API.OpenJobLog>();
 
   const columns: ProColumns<API.OpenJobLog>[] = [
     {
@@ -64,16 +65,24 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       hideInSearch: true
     },
     {
+      title: '异常信息',
+      dataIndex: 'cause',
+      valueType: 'text',
+      hideInTable: true
+    },
+    {
       title: '开始时间',
       dataIndex: 'beginTime',
       valueType: 'dateTime',
-      hideInTable: true
+      hideInTable: true,
+      hideInDescriptions: true
     },
     {
       title: '结束时间',
       dataIndex: 'endTime',
       valueType: 'dateTime',
-      hideInTable: true
+      hideInTable: true,
+      hideInDescriptions: true
     },
     {
       title: '操作',
@@ -81,16 +90,14 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <Link
-            to={{
-              pathname: '/util/ip',
-              search: `?id=${record.id}`,
-              hash: '#the-hash',
-              state: { fromDashboard: true },
+          <a
+            onClick={()=>{
+              setShowDetail(true);
+              setCurrentRow(record);
             }}
           >
             查看详情
-          </Link>
+          </a>
           <Divider type="vertical" />
           <a
             onClick={async () => {
@@ -154,6 +161,30 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
           </Button>
         </FooterToolbar>
       )}
+
+      <Drawer
+        width={400}
+        visible={showDetail}
+        onClose={() => {
+          setCurrentRow(undefined);
+          setShowDetail(false);
+        }}
+        closable={false}
+      >
+        {currentRow?.id && (
+          <ProDescriptions<API.OpenJobLog>
+            column={1}
+            title={currentRow?.id}
+            request={async () => ({
+              data: currentRow || {},
+            })}
+            params={{
+              id: currentRow?.id,
+            }}
+            columns={columns as ProDescriptionsItemProps<API.OpenJobLog>[]}
+          />
+        )}
+      </Drawer>
     </PageContainer>
   );
 };
