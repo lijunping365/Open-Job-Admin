@@ -20,7 +20,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const onFetchStatisticData = useCallback(async () => {
     fetchSpiderNumber(appId).then((res)=>{
       if (res) setStatisticNumber(res);
-    }).catch();
+    }).catch().finally(()=>setLoading(false));
 
     fetchSpiderReport(appId).then((res)=>{
       if (res){
@@ -37,7 +37,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   }, []);
 
   useEffect(()=>{
-    onFetchStatisticData().then(()=>setLoading(false));
+    onFetchStatisticData().then();
   },[]);
 
   return (
