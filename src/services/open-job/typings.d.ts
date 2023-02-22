@@ -11,7 +11,7 @@ declare namespace API {
   };
 
   type Instance = {
-    clientId: string;
+    serverId: string;
     onlineTime: Date;
     status: string;
     weight: number;

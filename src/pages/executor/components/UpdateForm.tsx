@@ -57,7 +57,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         {...formLayout}
         form={form}
         initialValues={{
-          clientId: values.clientId,
+          serverId: values.serverId,
           onlineTime: values.onlineTime,
           status: values.status,
           weight: values.weight,

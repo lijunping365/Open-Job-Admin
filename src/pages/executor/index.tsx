@@ -73,7 +73,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const columns: ProColumns<API.Instance>[] = [
     {
       title: '实例地址',
-      dataIndex: 'clientId',
+      dataIndex: 'serverId',
       tooltip: '唯一标识'
     },
     {
@@ -104,12 +104,12 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
           <a
             onClick={async () => {
               if (record.status === 'OFF_LINE') {
-                await handlerChange(record.clientId)
+                await handlerChange(record.serverId)
                 actionRef.current?.reloadAndRest?.();
               } else {
                 const confirm = await confirmModal("确定要下线吗？");
                 if (confirm){
-                  await handlerOffline(record.clientId);
+                  await handlerOffline(record.serverId);
                   actionRef.current?.reloadAndRest?.();
                 }
               }
