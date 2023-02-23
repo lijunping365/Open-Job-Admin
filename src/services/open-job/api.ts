@@ -85,7 +85,7 @@ export async function addUser(params: API.User) {
 
 export async function removeUser(params: {ids: number[]}) {
   return request('/user/delete', {
-    method: 'PUT',
+    method: 'DELETE',
     data: {...params}
   });
 }
