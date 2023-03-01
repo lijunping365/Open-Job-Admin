@@ -38,6 +38,7 @@ declare namespace API {
     jobId: number;
     status: number;
     cause: string;
+    serverId: string;
     createTime: Date;
   };
 

@@ -48,7 +48,11 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       title: '任务编号',
       dataIndex: 'jobId',
       valueType: 'text',
-      search: false
+    },
+    {
+      title: '调度节点',
+      dataIndex: 'serverId',
+      valueType: 'text',
     },
     {
       title: '调度结果',
