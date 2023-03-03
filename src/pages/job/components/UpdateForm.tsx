@@ -93,6 +93,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           jobName: values.jobName,
           handlerName: values.handlerName,
           params: values.params,
+          script: values.script,
         }}
       >
         <Row>
@@ -158,7 +159,16 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               name="params"
               label="任务参数"
             >
-              <TextArea rows={4}  placeholder="请输入任务参数（json 格式）" />
+              <TextArea rows={4}  placeholder="请输入任务参数" />
+            </FormItem>
+          </Col>
+
+          <Col span={12}>
+            <FormItem
+              name="script"
+              label="调度脚本"
+            >
+              <TextArea rows={4}  placeholder="请输入调度脚本" />
             </FormItem>
           </Col>
         </Row>

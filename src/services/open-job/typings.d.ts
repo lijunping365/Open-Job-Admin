@@ -57,6 +57,7 @@ declare namespace API {
     handlerName: string;
     cronExpression: string;
     params: string;
+    script: string;
     status: number;
     createTime: Date;
     createUser: number;
