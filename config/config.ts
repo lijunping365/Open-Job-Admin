@@ -8,6 +8,8 @@ import routes from './routes';
 const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
+  base: "/openJob/front", // 路由
+  publicPath: "/openJob/",// 静态资源文件路径
   hash: true,
   antd: {},
   dva: {
