@@ -56,6 +56,8 @@ declare namespace API {
     jobName: string;
     handlerName: string;
     cronExpression: string;
+    shardingNodes: string;
+    routeStrategy: number;
     params: string;
     script: string;
     status: number;

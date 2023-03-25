@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Form, Button, Input, Modal, Row, Col, message, Select} from 'antd';
 import CronModal from "@/components/CronModel";
-import {fetchOpenJobAppList, validateCronExpress} from "@/services/open-job/api";
+import {fetchAllInstance, fetchOpenJobAppList, validateCronExpress} from "@/services/open-job/api";
 
 export interface UpdateFormProps {
   onCancel: (flag?: boolean, formVals?: Partial<API.OpenJob>) => void;
@@ -31,6 +31,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const [cronModalVisible, handleCronModalVisible] = useState<boolean>(false);
   const [cronExpressValue, setCronExpressValue] = useState<any>(values.cronExpression);
   const [openJobAppOptions, setOpenJobAppOptions] = useState<React.ReactNode[]>([]);
+  const [openJobNodeOptions, setOpenJobNodeOptions] = useState<React.ReactNode[]>([]);
 
   const onFetchOpenJobAppList = useCallback(async () => {
     const result: API.OpenJobApp[] = await fetchOpenJobAppList();
@@ -46,6 +47,16 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     onFetchOpenJobAppList().then();
   },[]);
 
+  const handleSelectApp = async (op: any) => {
+    const result: API.Instance[] = await fetchAllInstance(op);
+    if (result){
+      const options = result.map(instance=>{
+        return <Option value={instance.serverId}>{instance.serverId}</Option>
+      });
+      setOpenJobNodeOptions(options);
+    }
+  };
+
   const handleSave = async () => {
     const fieldsValue: any = await form.validateFields();
     if(!cronExpressValue || cronExpressValue.length === 0){
@@ -56,10 +67,18 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
     if(!result){
       return;
     }
+
+    const {routeStrategy} =  fieldsValue;
+    const {shardingNodes} =  fieldsValue;
+    if (routeStrategy === 1 && (!shardingNodes || shardingNodes.length === 0)){
+      message.error("分片执行时分片节点不能为空")
+      return;
+    }
     handleUpdate({
       ...values,
       ...fieldsValue,
-      cronExpression: cronExpressValue
+      cronExpression: cronExpressValue,
+      shardingNodes: shardingNodes.join(",")
     });
   };
 
@@ -92,6 +111,8 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           appId: values.appId,
           jobName: values.jobName,
           handlerName: values.handlerName,
+          routeStrategy: values.routeStrategy,
+          shardingNodes: values.shardingNodes ? values.shardingNodes.split(",") : [],
           params: values.params,
           script: values.script,
         }}
@@ -109,10 +130,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           <Col span={12}>
             <FormItem
               name="handlerName"
-              label="handlerName"
-              rules={[{ required: true, message: '请输入handlerName！' }]}
+              label="jobHandler"
+              rules={[{ required: true, message: '请输入jobHandler！' }]}
             >
-              <Input placeholder="请输入handlerName" />
+              <Input placeholder="请输入jobHandler" />
             </FormItem>
           </Col>
         </Row>
@@ -127,6 +148,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             >
               <Select
                 showSearch
+                onChange={handleSelectApp}
                 filterOption={(inputValue, option) =>
                   option!.children.indexOf(inputValue) !== -1
                 }
@@ -149,6 +171,36 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
                   Cron 工具
                 </Button>
               </Input.Group>
+            </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={12}>
+            <FormItem
+              name="routeStrategy"
+              label="路由策略"
+            >
+              <Select defaultValue={values.routeStrategy}>
+                <Option value={0}>负载均衡</Option>
+                <Option value={1}>分片执行</Option>
+              </Select>
+            </FormItem>
+          </Col>
+
+          <Col span={12}>
+            <FormItem
+              name="shardingNodes"
+              label="选择节点"
+            >
+              <Select
+                mode="multiple"
+                allowClear
+                style={{ width: '100%' }}
+                placeholder="请选择节点"
+              >
+                {openJobNodeOptions}
+              </Select>
             </FormItem>
           </Col>
         </Row>

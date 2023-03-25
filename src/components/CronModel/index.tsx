@@ -48,7 +48,9 @@ const CronModal: React.FC<CronModalProps> = (props) => {
     nextTriggerTime(value).then((res) => {
       if (res.errMsg){
         setErrMsg(res.errMsg);
+        setNextTimeList([]);
       }else {
+        setErrMsg('');
         setNextTimeList(res.times);
         setInputValue(value);
         form.setFieldsValue({
@@ -113,7 +115,7 @@ const CronModal: React.FC<CronModalProps> = (props) => {
         {(errMsg && errMsg?.length !== 0) && (
           <Typography.Text type="danger">{errMsg}</Typography.Text>
         )}
-        {(!errMsg || errMsg?.length === 0) && (
+        {(nextTimeList && nextTimeList?.length !== 0) && (
           <List
             dataSource={nextTimeList}
             size="small"

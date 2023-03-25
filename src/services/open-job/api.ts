@@ -114,6 +114,13 @@ export async function fetchInstancePage(
   });
 }
 
+export async function fetchAllInstance(appId: any) {
+  return request('/instance/list', {
+    method: 'GET',
+    params: {appId}
+  });
+}
+
 export async function updateInstance(params: Partial<API.Instance>) {
   return request('/instance/update', {
     method: 'PUT',
