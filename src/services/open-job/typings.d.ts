@@ -7,7 +7,7 @@ declare namespace API {
     username: string;
     status: number;
     phone: string;
-    createTime: Date
+    createTime: Date;
   };
 
   type Instance = {
@@ -20,17 +20,15 @@ declare namespace API {
   type StatisticNumber = {
     taskTotalNum: number;
     taskRunningNum: number;
-    scheduleTotalNum: number;
-    scheduleSucceedNum: number;
     executorTotalNum: number;
     executorOnlineNum: number;
-  }
+  };
 
   type StatisticReport = {
     date: Date;
     name: string;
     value: number;
-  }
+  };
 
   type OpenJobLog = {
     id: number;
