@@ -1,8 +1,8 @@
-import {PlusOutlined} from '@ant-design/icons';
-import {Button, Divider, message} from 'antd';
-import React, {useRef, useState} from 'react';
-import {FooterToolbar, PageContainer} from '@ant-design/pro-layout';
-import type {ActionType, ProColumns} from '@ant-design/pro-table';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Divider, message } from 'antd';
+import React, { useRef, useState } from 'react';
+import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
+import type { ActionType, ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
 import {
@@ -10,13 +10,14 @@ import {
   fetchOpenJobAppList,
   fetchScheduleTaskPage,
   removeScheduleTask,
+  runScheduleTask,
   startScheduleTask,
   stopScheduleTask,
-  updateScheduleTask
+  updateScheduleTask,
 } from '@/services/open-job/api';
-import {confirmModal} from "@/components/ConfirmModel";
-import CreateForm from "./components/CreateForm";
-import {Link} from "@umijs/preset-dumi/lib/theme";
+import { confirmModal } from '@/components/ConfirmModel';
+import CreateForm from './components/CreateForm';
+import { Link } from '@umijs/preset-dumi/lib/theme';
 
 /**
  * 添加节点
@@ -65,7 +66,7 @@ const handleRemove = async (selectedRows: any[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
-    await removeScheduleTask({ids: selectedRows});
+    await removeScheduleTask({ ids: selectedRows });
     hide();
     message.success('删除成功，即将刷新');
     return true;
@@ -92,6 +93,26 @@ const handleStart = async (jobId: number) => {
   } catch (error) {
     hide();
     message.error('启动失败，请重试');
+    return false;
+  }
+};
+
+/**
+ * 运行任务
+ *
+ * @param jobId
+ */
+const handleRun = async (jobId: number) => {
+  const hide = message.loading('正在运行');
+  if (!jobId) return true;
+  try {
+    await runScheduleTask(jobId);
+    hide();
+    message.success('运行完成，请查看');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('运行失败，请重试');
     return false;
   }
 };
@@ -139,9 +160,9 @@ const TableList: React.FC = () => {
       hideInTable: true,
       request: async () => {
         const res = await fetchOpenJobAppList();
-        if (res){
+        if (res) {
           return res.map((item: any) => {
-            return {"label": item.appName, "value": item.id}
+            return { label: item.appName, value: item.id };
           });
         }
         return null;
@@ -196,13 +217,21 @@ const TableList: React.FC = () => {
             onClick={async () => {
               if (record.status === 0) {
                 await handleStart(record.id);
-              }else {
+              } else {
                 await handleStop(record.id);
               }
               actionRef.current?.reloadAndRest?.();
             }}
           >
-            {record.status === 0 ? '启动': '停止'}
+            {record.status === 0 ? '启动' : '停止'}
+          </a>
+          <Divider type="vertical" />
+          <a
+            onClick={async () => {
+              await handleRun(record.id);
+            }}
+          >
+            运行
           </a>
           <Divider type="vertical" />
           <a
@@ -217,7 +246,7 @@ const TableList: React.FC = () => {
           <a
             onClick={async () => {
               const confirm = await confirmModal();
-              if (confirm){
+              if (confirm) {
                 await handleRemove([record.id]);
                 actionRef.current?.reloadAndRest?.();
               }
@@ -226,16 +255,16 @@ const TableList: React.FC = () => {
             删除
           </a>
           <Divider type="vertical" />
-            <Link
-              to={{
-                pathname: '/logger',
-                search: `?id=${record.id}`,
-                hash: '#the-hash',
-                state: { fromDashboard: true },
-              }}
-            >
-              查看日志
-            </Link>
+          <Link
+            to={{
+              pathname: '/logger',
+              search: `?id=${record.id}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
+            }}
+          >
+            查看日志
+          </Link>
         </>
       ),
     },
@@ -261,7 +290,6 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新建
           </Button>,
         ]}
-
         request={async (params) => {
           const response = await fetchScheduleTaskPage({ ...params });
           return {
@@ -289,7 +317,7 @@ const TableList: React.FC = () => {
         >
           <Button
             onClick={async () => {
-              await handleRemove(selectedRowsState ? selectedRowsState.map((e) => e.id):[]);
+              await handleRemove(selectedRowsState ? selectedRowsState.map((e) => e.id) : []);
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -310,8 +338,8 @@ const TableList: React.FC = () => {
           }
         }}
         onCancel={() => handleCreateModalVisible(false)}
-        modalVisible={createModalVisible}>
-      </CreateForm>
+        modalVisible={createModalVisible}
+      ></CreateForm>
 
       {updateFormValues && Object.keys(updateFormValues).length ? (
         <UpdateForm
