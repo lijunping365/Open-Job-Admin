@@ -1,12 +1,12 @@
-import {message, Divider} from 'antd';
+import { message, Divider } from 'antd';
 import React, { useState, useRef } from 'react';
-import { PageContainer} from '@ant-design/pro-layout';
+import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import UpdateForm from './components/UpdateForm';
-import {confirmModal} from "@/components/ConfirmModel";
+import { confirmModal } from '@/components/ConfirmModel';
 import { fetchInstancePage, updateInstance, offline, online } from '@/services/open-job/api';
-import type {RouteChildrenProps} from "react-router";
+import type { RouteChildrenProps } from 'react-router';
 
 /**
  * 更新节点
@@ -67,14 +67,14 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   /** 分布更新窗口的弹窗 */
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const { query }: any = location;
-  const [appId] = useState<number>(query? query.id : 1);
+  const [appId] = useState<number>(query ? query.id : 1);
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.Instance>();
   const columns: ProColumns<API.Instance>[] = [
     {
       title: '实例地址',
       dataIndex: 'serverId',
-      tooltip: '唯一标识'
+      tooltip: '唯一标识',
     },
     {
       title: '上线时间',
@@ -82,12 +82,32 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       valueType: 'dateTime',
     },
     {
+      title: '运行时长',
+      dataIndex: 'liveTime',
+      valueType: 'text',
+    },
+    {
+      title: 'CPU 占用',
+      dataIndex: 'cpuInfo',
+      valueType: 'text',
+    },
+    {
+      title: '内存占用',
+      dataIndex: 'memoryInfo',
+      valueType: 'text',
+    },
+    {
+      title: '磁盘占用',
+      dataIndex: 'diskInfo',
+      valueType: 'text',
+    },
+    {
       title: '状态',
       dataIndex: 'status',
       hideInForm: true,
       valueEnum: {
-        'OFF_LINE': { text: '已下线', status: 'Error' },
-        'ON_LINE': { text: '已上线', status: 'Success' },
+        OFF_LINE: { text: '已下线', status: 'Error' },
+        ON_LINE: { text: '已上线', status: 'Success' },
       },
     },
     {
@@ -104,18 +124,18 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
           <a
             onClick={async () => {
               if (record.status === 'OFF_LINE') {
-                await handlerChange(record.serverId)
+                await handlerChange(record.serverId);
                 actionRef.current?.reloadAndRest?.();
               } else {
-                const confirm = await confirmModal("确定要下线吗？");
-                if (confirm){
+                const confirm = await confirmModal('确定要下线吗？');
+                if (confirm) {
                   await handlerOffline(record.serverId);
                   actionRef.current?.reloadAndRest?.();
                 }
               }
             }}
           >
-            {record.status === 'OFF_LINE' ? '上线': '下线'}
+            {record.status === 'OFF_LINE' ? '上线' : '下线'}
           </a>
           <Divider type="vertical" />
           <a

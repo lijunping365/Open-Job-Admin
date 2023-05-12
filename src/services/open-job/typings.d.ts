@@ -13,6 +13,10 @@ declare namespace API {
   type Instance = {
     serverId: string;
     onlineTime: Date;
+    liveTime: string;
+    cpuInfo: string;
+    memoryInfo: string;
+    diskInfo: string;
     status: string;
     weight: number;
   };
