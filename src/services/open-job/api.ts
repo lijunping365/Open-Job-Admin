@@ -230,7 +230,7 @@ export async function nextTriggerTime(cronExpress: string) {
   });
 }
 
-export async function fetchSpiderNumber(appId: number) {
+export async function fetchAnalysisNumber(appId: number) {
   return request('/analysis/statistic', {
     method: 'GET',
     params: {
@@ -239,11 +239,29 @@ export async function fetchSpiderNumber(appId: number) {
   });
 }
 
-export async function fetchSpiderReport(appId: number) {
+export async function fetchAnalysisChart(params: API.ChartParam) {
   return request('/analysis/chart', {
     method: 'GET',
     params: {
-      appId,
+      ...params,
+    },
+  });
+}
+
+export async function fetchJobTok(params: API.JobTokParam) {
+  return request('/analysis/jobTok', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function fetchInstanceTok(params: API.InstanceTokParam) {
+  return request('/analysis/instanceTok', {
+    method: 'GET',
+    params: {
+      ...params,
     },
   });
 }

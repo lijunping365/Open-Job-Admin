@@ -265,6 +265,17 @@ const TableList: React.FC = () => {
           >
             查看日志
           </Link>
+          <Divider type="vertical" />
+          <Link
+            to={{
+              pathname: '/job/monitor',
+              search: `?appId=${record.appId}&jobId=${record.id}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
+            }}
+          >
+            任务监控
+          </Link>
         </>
       ),
     },

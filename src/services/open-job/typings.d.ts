@@ -28,10 +28,16 @@ declare namespace API {
     executorOnlineNum: number;
   };
 
-  type StatisticReport = {
+  type AnalysisChart = {
     date: Date;
     name: string;
     value: number;
+  };
+
+  type TokChart = {
+    key: string;
+    totalCount: number;
+    successCount: number;
   };
 
   type OpenJobLog = {
@@ -149,4 +155,27 @@ declare namespace API {
     description?: string;
     type?: NoticeIconItemType;
   };
+
+  type ChartParam = {
+    appId: number;
+    jobId?: number;
+    serverId?: string;
+    count?: number;
+  };
+
+  type JobTokParam = {
+    appId: number;
+    serverId?: string;
+    count?: number;
+    top?: number;
+  };
+
+  type InstanceTokParam = {
+    appId: number;
+    jobId?: number;
+    count?: number;
+    top?: number;
+  };
+
+  type TimeType = 'today' | 'week' | 'month' | 'year';
 }
