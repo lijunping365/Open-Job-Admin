@@ -230,11 +230,37 @@ export async function nextTriggerTime(cronExpress: string) {
   });
 }
 
-export async function fetchAnalysisNumber(appId: number) {
+export async function fetchAnalysisNumber() {
   return request('/analysis/statistic', {
+    method: 'GET',
+  });
+}
+
+export async function fetchAppAnalysisNumber(appId: number) {
+  return request('/analysis/appStatistic', {
     method: 'GET',
     params: {
       appId,
+    },
+  });
+}
+
+export async function fetchJobAnalysisNumber(appId: number, jobId: number) {
+  return request('/analysis/jobStatistic', {
+    method: 'GET',
+    params: {
+      appId,
+      jobId
+    },
+  });
+}
+
+export async function fetchInstanceAnalysisNumber(appId: number, serverId: string ) {
+  return request('/analysis/instanceStatistic', {
+    method: 'GET',
+    params: {
+      appId,
+      serverId,
     },
   });
 }

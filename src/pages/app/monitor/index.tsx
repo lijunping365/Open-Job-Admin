@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Col, message, Row, Statistic } from 'antd';
-import { fetchAnalysisNumber, fetchInstanceTok, fetchJobTok } from '@/services/open-job/api';
+import {fetchAppAnalysisNumber, fetchInstanceTok, fetchJobTok} from '@/services/open-job/api';
 import type { RouteChildrenProps } from 'react-router';
 import { BarChartOutlined, DashboardOutlined } from '@ant-design/icons';
 import { ChartCard } from '@/components/ChartCard';
@@ -45,7 +45,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
   useEffect(() => {
     const getAnalysisNumber = () => {
-      fetchAnalysisNumber(appId)
+      fetchAppAnalysisNumber(appId)
         .then((res) => {
           if (res) setStatisticNumber(res);
         })

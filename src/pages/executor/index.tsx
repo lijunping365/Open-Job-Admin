@@ -78,7 +78,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       tooltip: '唯一标识',
     },
     {
-      title: '上线时间',
+      title: '最近上线时间',
       dataIndex: 'onlineTime',
       valueType: 'dateTime',
     },

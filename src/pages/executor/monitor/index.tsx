@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Col, Row, Statistic } from 'antd';
-import { fetchAnalysisNumber, fetchJobTok } from '@/services/open-job/api';
+import { fetchInstanceAnalysisNumber, fetchJobTok } from '@/services/open-job/api';
 import type { RouteChildrenProps } from 'react-router';
 import { BarChartOutlined, DashboardOutlined } from '@ant-design/icons';
 import { ChartCard } from '@/components/ChartCard';
@@ -31,7 +31,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
   useEffect(() => {
     const getAnalysisNumber = () => {
-      fetchAnalysisNumber(appId)
+      fetchInstanceAnalysisNumber(appId, serverId)
         .then((res) => {
           if (res) setStatisticNumber(res);
         })
@@ -47,20 +47,51 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
-              title="任务数量"
-              value={statisticNumber?.taskRunningNum}
+              title="CPU信息"
+              value={statisticNumber?.cpuInfo  || '-'}
               prefix={<DashboardOutlined />}
-              suffix={`/ ${statisticNumber?.taskTotalNum}`}
+              valueStyle={{fontSize: '20px'}}
             />
           </Card>
         </Col>
         <Col span={6}>
           <Card>
             <Statistic
-              title="执行器数量"
-              value={statisticNumber?.executorOnlineNum}
+              title="内存信息"
+              value={statisticNumber?.memoryInfo || '-'}
               prefix={<BarChartOutlined />}
-              suffix={`/ ${statisticNumber?.executorTotalNum}`}
+              valueStyle={{fontSize: '20px'}}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="磁盘信息"
+              value={statisticNumber?.diskInfo || '-'}
+              valueStyle={{fontSize: '20px'}}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="运行时长"
+              value={statisticNumber?.liveTime || '-'}
+              valueStyle={{fontSize: '20px'}}
+            />
+          </Card>
+        </Col>
+      </Row>
+
+      <Row gutter={16} style={{ marginTop: '20px' }}>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="运行状态"
+              prefix={<BarChartOutlined />}
+              value={statisticNumber?.status === 'ON_LINE' ? '运行中' : '已下线'}
+              valueStyle={{fontSize: '20px'}}
             />
           </Card>
         </Col>

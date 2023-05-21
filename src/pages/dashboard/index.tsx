@@ -65,7 +65,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
   useEffect(() => {
     const getAnalysisNumber = () => {
-      fetchAnalysisNumber(appId)
+      fetchAnalysisNumber()
         .then((res) => {
           if (res) setStatisticNumber(res);
         })
@@ -105,6 +105,15 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   return (
     <PageContainer loading={loading}>
       <Row gutter={16} style={{ marginTop: '20px' }}>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="应用数量"
+              value={statisticNumber?.appNum}
+              prefix={<BarChartOutlined />}
+            />
+          </Card>
+        </Col>
         <Col span={6}>
           <Card>
             <Statistic

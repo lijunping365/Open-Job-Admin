@@ -22,10 +22,18 @@ declare namespace API {
   };
 
   type StatisticNumber = {
+    appNum: number;
+    status: string;
     taskTotalNum: number;
     taskRunningNum: number;
     executorTotalNum: number;
     executorOnlineNum: number;
+    lastRunTime: string;
+    stateChangeTime: string;
+    liveTime: string;
+    cpuInfo: string;
+    memoryInfo: string;
+    diskInfo: string;
   };
 
   type AnalysisChart = {

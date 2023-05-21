@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Col, Row, Statistic } from 'antd';
-import { fetchAnalysisNumber, fetchInstanceTok } from '@/services/open-job/api';
+import { fetchJobAnalysisNumber, fetchInstanceTok } from '@/services/open-job/api';
 import type { RouteChildrenProps } from 'react-router';
 import { BarChartOutlined, DashboardOutlined } from '@ant-design/icons';
 import { ChartCard } from '@/components/ChartCard';
@@ -31,7 +31,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
   useEffect(() => {
     const getAnalysisNumber = () => {
-      fetchAnalysisNumber(appId)
+      fetchJobAnalysisNumber(appId, jobId)
         .then((res) => {
           if (res) setStatisticNumber(res);
         })
@@ -47,20 +47,30 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
-              title="任务数量"
-              value={statisticNumber?.taskRunningNum}
+              title="最近一次执行时间"
+              value={statisticNumber?.lastRunTime || ''}
               prefix={<DashboardOutlined />}
-              suffix={`/ ${statisticNumber?.taskTotalNum}`}
+              valueStyle={{fontSize: '20px'}}
             />
           </Card>
         </Col>
         <Col span={6}>
           <Card>
             <Statistic
-              title="执行器数量"
-              value={statisticNumber?.executorOnlineNum}
+              title="任务最近启动时间"
+              value={statisticNumber?.stateChangeTime || ''}
               prefix={<BarChartOutlined />}
-              suffix={`/ ${statisticNumber?.executorTotalNum}`}
+              valueStyle={{fontSize: '20px'}}
+            />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="任务状态"
+              value={statisticNumber?.status === '1'? "运行中" : "已停止" || ''}
+              prefix={<BarChartOutlined />}
+              valueStyle={{fontSize: '20px'}}
             />
           </Card>
         </Col>
