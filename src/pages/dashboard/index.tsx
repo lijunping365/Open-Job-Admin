@@ -88,6 +88,16 @@ const TableList: React.FC<RouteChildrenProps> = () => {
             />
           </Card>
         </Col>
+        <Col span={6}>
+          <Card>
+            <Statistic
+              title="今日报警次数"
+              value={statisticNumber?.executorOnlineNum}
+              prefix={<BarChartOutlined />}
+              suffix={`/ ${statisticNumber?.executorTotalNum}`}
+            />
+          </Card>
+        </Col>
       </Row>
 
       <Card
