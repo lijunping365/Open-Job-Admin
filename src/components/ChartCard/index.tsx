@@ -1,34 +1,13 @@
 import { Chart, LineAdvance } from 'bizcharts';
-import { Card, message } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { fetchAnalysisChart } from '@/services/open-job/api';
-import { handlerChartData } from '@/utils/utils';
+import { Card } from 'antd';
+import React from 'react';
 
 interface ChartCardProps {
-  appId: number;
-  jobId?: number;
-  serverId?: string;
-  count?: number;
+  loading: boolean;
+  chartData: API.AnalysisChart[];
 }
 
-export const ChartCard = ({ appId, jobId, serverId, count }: ChartCardProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [chartData, setChartData] = useState<API.AnalysisChart[]>([]);
-
-  useEffect(() => {
-    const getAnalysisChart = () => {
-      setLoading(true);
-      fetchAnalysisChart({ appId, jobId, serverId, count })
-        .then((res: any) => {
-          if (res) {
-            setChartData(handlerChartData(res));
-          }
-        })
-        .catch((reason) => message.error(reason))
-        .finally(() => setLoading(false));
-    };
-    getAnalysisChart();
-  }, []);
+export const ChartCard = ({ loading, chartData }: ChartCardProps) => {
 
   return (
     <Card

@@ -1,33 +1,38 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Col, Row, Statistic } from 'antd';
-import { fetchInstanceAnalysisNumber, fetchJobTok } from '@/services/open-job/api';
+import {Card, Col, message, Row, Statistic} from 'antd';
+import {fetchAnalysisChart, fetchInstanceAnalysisNumber, fetchJobTok} from '@/services/open-job/api';
 import type { RouteChildrenProps } from 'react-router';
 import { BarChartOutlined, DashboardOutlined } from '@ant-design/icons';
 import { ChartCard } from '@/components/ChartCard';
 import { TopCard } from '@/components/TopCard';
-import { handlerTokData } from '@/utils/utils';
+import {getTopCount, handlerChartData, handlerTokData} from '@/utils/utils';
 
 const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const { query }: any = location;
   const [appId] = useState<number>(query ? query.appId : 1);
   const [serverId] = useState<string>(query ? query.serverId : '');
   const [loading, setLoading] = useState<boolean>(true);
+  const [tokLoading, setTokLoading] = useState<boolean>(true);
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
   const [jobTok, setJobTok] = useState<API.TokChart[]>([]);
+  const [chartData, setChartData] = useState<API.AnalysisChart[]>([]);
+  const [selectDate, setSelectDate] = useState<API.TimeType>('today');
 
   const onFetchJobTokData = useCallback(async () => {
-    fetchJobTok({ appId, serverId })
+    setTokLoading(true);
+    const count = getTopCount(selectDate);
+    fetchJobTok({ appId, serverId, count })
       .then((res) => {
         if (res) setJobTok(handlerTokData(res));
       })
       .catch()
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => setTokLoading(false));
+  }, [appId, serverId]);
 
   useEffect(() => {
     onFetchJobTokData().then();
-  }, []);
+  }, [appId, serverId]);
 
   useEffect(() => {
     const getAnalysisNumber = () => {
@@ -39,10 +44,25 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         .finally(() => setLoading(false));
     };
     getAnalysisNumber();
-  }, [appId]);
+  }, [appId, serverId]);
+
+  useEffect(() => {
+    const getAnalysisChart = () => {
+      setLoading(true);
+      fetchAnalysisChart({ appId, serverId })
+        .then((res: any) => {
+          if (res) {
+            setChartData(handlerChartData(res));
+          }
+        })
+        .catch((reason) => message.error(reason))
+        .finally(() => setLoading(false));
+    };
+    getAnalysisChart();
+  }, [appId, serverId]);
 
   return (
-    <PageContainer loading={loading}>
+    <PageContainer>
       <Row gutter={16} style={{ marginTop: '20px' }}>
         <Col span={6}>
           <Card>
@@ -97,9 +117,15 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         </Col>
       </Row>
 
-      <ChartCard appId={appId} serverId={serverId} />
+      <ChartCard loading={tokLoading} chartData={chartData} />
 
-      <TopCard title={'任务调度次数排行榜TOP10'} data={jobTok} loading={loading} />
+      <TopCard
+        title={'任务调度次数排行榜TOP10'}
+        data={jobTok}
+        loading={loading}
+        selectDate={selectDate}
+        onChange={(value) => setSelectDate(value)}
+      />
     </PageContainer>
   );
 };
