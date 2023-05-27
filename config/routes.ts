@@ -45,6 +45,12 @@
     hideInMenu: true,
   },
   {
+    name: 'alarm',
+    icon: 'table',
+    path: '/alarm',
+    component: './alarm',
+  },
+  {
     name: 'user',
     icon: 'table',
     path: '/user',

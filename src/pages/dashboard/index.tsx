@@ -6,11 +6,13 @@ import {fetchAnalysisNumber, fetchAnalysisChart, fetchOpenJobAppList} from '@/se
 import type { RouteChildrenProps } from 'react-router';
 import { BarChartOutlined, DashboardOutlined } from '@ant-design/icons';
 import {handlerChartData} from "@/utils/utils";
+import {Link} from "@umijs/preset-dumi/lib/theme";
 
 const TableList: React.FC<RouteChildrenProps> = () => {
   const [appId, setAppId] = useState<number>();
   const [appSet, setAppSet] = useState<API.OpenJobApp[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [statisticLoading, setStatisticLoading] = useState<boolean>(true);
+  const [chartLoading, setChartLoading] = useState<boolean>(true);
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
   const [chartData, setChartData] = useState<API.AnalysisChart[]>([]);
 
@@ -21,7 +23,7 @@ const TableList: React.FC<RouteChildrenProps> = () => {
           if (res) setStatisticNumber(res);
         })
         .catch()
-        .finally(() => setLoading(false));
+        .finally(() => setStatisticLoading(false));
     };
     getAnalysisNumber();
   }, []);
@@ -51,17 +53,19 @@ const TableList: React.FC<RouteChildrenProps> = () => {
             setChartData(handlerChartData(res));
           }
         })
-        .catch();
+        .catch()
+        .finally(() => setChartLoading(false));
     };
     getAnalysisChart();
   }, [appId]);
 
   return (
-    <PageContainer loading={loading}>
+    <PageContainer>
       <Row gutter={16} style={{ marginTop: '20px' }}>
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="应用数量"
               value={statisticNumber?.appNum}
               prefix={<BarChartOutlined />}
@@ -71,6 +75,7 @@ const TableList: React.FC<RouteChildrenProps> = () => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="任务总数"
               value={statisticNumber?.taskRunningNum}
               prefix={<DashboardOutlined />}
@@ -81,6 +86,7 @@ const TableList: React.FC<RouteChildrenProps> = () => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="执行器总数"
               value={statisticNumber?.executorOnlineNum}
               prefix={<BarChartOutlined />}
@@ -90,18 +96,26 @@ const TableList: React.FC<RouteChildrenProps> = () => {
         </Col>
         <Col span={6}>
           <Card>
-            <Statistic
-              title="今日报警次数"
-              value={statisticNumber?.executorOnlineNum}
-              prefix={<BarChartOutlined />}
-              suffix={`/ ${statisticNumber?.executorTotalNum}`}
-            />
+            <Link
+              to={{
+                pathname: '/alarm',
+                hash: '#the-hash',
+                state: { fromDashboard: true },
+              }}
+            >
+              <Statistic
+                loading={statisticLoading}
+                title="今日报警次数"
+                value={statisticNumber?.alarmNum}
+                prefix={<BarChartOutlined />}
+              />
+            </Link>
           </Card>
         </Col>
       </Row>
 
       <Card
-        loading={loading}
+        loading={chartLoading}
         bordered={false}
         title="任务调度次数"
         style={{
@@ -111,6 +125,7 @@ const TableList: React.FC<RouteChildrenProps> = () => {
         extra={
           <div>
             <Select
+              style={{width: '200px'}}
               defaultValue={appId}
               onChange={(id:any)=> setAppId(id)}
               options={(appSet || []).map((d) => ({

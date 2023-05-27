@@ -163,6 +163,33 @@ export async function removeTaskLog(params: { ids: number[] }) {
   });
 }
 
+export async function fetchAlarmRecordPage(params: {
+  /** 当前的页码 */
+  current?: number;
+  /** 页面的容量 */
+  pageSize?: number;
+  /** 应用id */
+  appId?: number;
+  /** 任务id */
+  jobId?: number;
+  /** 报警时间 */
+  createTime?: Date;
+}) {
+  return request('/alarm/page', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function removeAlarmRecord(params: { ids: number[] }) {
+  return request('/alarm/delete', {
+    method: 'DELETE',
+    data: { ...params },
+  });
+}
+
 export async function fetchScheduleTaskPage(params: {
   // query
   /** 当前的页码 */

@@ -7,6 +7,7 @@ import { BarChartOutlined, DashboardOutlined } from '@ant-design/icons';
 import { ChartCard } from '@/components/ChartCard';
 import { TopCard } from '@/components/TopCard';
 import {getTopCount, handlerChartData, handlerTokData} from '@/utils/utils';
+import {Link} from "@umijs/preset-dumi/lib/theme";
 
 const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const { query }: any = location;
@@ -97,6 +98,24 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
               prefix={<BarChartOutlined />}
               suffix={`/ ${statisticNumber?.executorTotalNum}`}
             />
+          </Card>
+        </Col>
+        <Col span={6}>
+          <Card>
+            <Link
+              to={{
+                pathname: '/alarm',
+                search: `?appId=${appId}`,
+                hash: '#the-hash',
+                state: { fromDashboard: true },
+              }}
+            >
+              <Statistic
+                title="今日报警次数"
+                value={statisticNumber?.alarmNum}
+                prefix={<BarChartOutlined />}
+              />
+            </Link>
           </Card>
         </Col>
       </Row>

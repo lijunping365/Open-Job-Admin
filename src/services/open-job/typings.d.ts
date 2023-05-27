@@ -23,6 +23,7 @@ declare namespace API {
 
   type StatisticNumber = {
     appNum: number;
+    alarmNum: number;
     status: string;
     taskTotalNum: number;
     taskRunningNum: number;
@@ -64,6 +65,16 @@ declare namespace API {
     appDesc: string;
     createTime: Date;
     createUser: number;
+  };
+
+  type OpenJobAlarm = {
+    id: number;
+    appId: number;
+    jobId: number;
+    serverId: string;
+    message: string;
+    receiver: number;
+    createTime: Date;
   };
 
   type OpenJob = {

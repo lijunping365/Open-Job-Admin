@@ -7,6 +7,7 @@ export default {
   'menu.appMonitor': '应用监控',
   'menu.job': '任务管理',
   'menu.jobMonitor': '任务监控',
+  'menu.alarm': '报警管理',
   'menu.user': '用户管理',
   'menu.executor': '执行器管理',
   'menu.executorMonitor': '执行器监控',
