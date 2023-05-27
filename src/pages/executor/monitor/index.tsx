@@ -28,11 +28,11 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       })
       .catch()
       .finally(() => setTokLoading(false));
-  }, [appId, serverId]);
+  }, [appId, serverId, selectDate]);
 
   useEffect(() => {
     onFetchJobTokData().then();
-  }, [appId, serverId]);
+  }, [appId, serverId, selectDate]);
 
   useEffect(() => {
     const getAnalysisNumber = () => {

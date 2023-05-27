@@ -29,11 +29,11 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       })
       .catch()
       .finally(() => setTokLoading(false));
-  }, [appId, jobId]);
+  }, [appId, jobId, selectDate]);
 
   useEffect(() => {
     onFetchInstanceTokData().then();
-  }, [appId, jobId]);
+  }, [appId, jobId, selectDate]);
 
   useEffect(() => {
     const getAnalysisNumber = () => {
@@ -45,7 +45,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         .finally(() => setStatisticLoading(false));
     };
     getAnalysisNumber();
-  }, [appId]);
+  }, [appId, jobId]);
 
   useEffect(() => {
     const getAnalysisChart = () => {
