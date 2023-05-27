@@ -12,6 +12,7 @@ import {Link} from "@umijs/preset-dumi/lib/theme";
 const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const { query }: any = location;
   const [appId] = useState<number>(query ? query.id : 1);
+  const [statisticLoading, setStatisticLoading] = useState<boolean>(true);
   const [chartLoading, setChartLoading] = useState<boolean>(true);
   const [tokLoading1, setTokLoading1] = useState<boolean>(true);
   const [tokLoading2, setTokLoading2] = useState<boolean>(true);
@@ -24,7 +25,6 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
 
   const onFetchJobTokData = useCallback(async () => {
-    setTokLoading1(true);
     fetchJobTok({ appId, count: getTopCount(selectDate1) })
       .then((res) => {
         if (res) setJobTok(handlerTokData(res));
@@ -38,7 +38,6 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   }, [appId, selectDate1]);
 
   const onFetchInstanceTokData = useCallback(async () => {
-    setTokLoading2(true);
     fetchInstanceTok({ appId, count: getTopCount(selectDate2) })
       .then((res) => {
         if (res) setInstanceTok(handlerTokData(res));
@@ -57,14 +56,14 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         .then((res) => {
           if (res) setStatisticNumber(res);
         })
-        .catch();
+        .catch()
+        .finally(() => setStatisticLoading(false));
     };
     getAnalysisNumber();
   }, [appId]);
 
   useEffect(() => {
     const getAnalysisChart = () => {
-      setChartLoading(true);
       fetchAnalysisChart({appId})
         .then((res: any) => {
           if (res) {
@@ -83,6 +82,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="任务数量"
               value={statisticNumber?.taskRunningNum}
               prefix={<DashboardOutlined />}
@@ -93,6 +93,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="执行器数量"
               value={statisticNumber?.executorOnlineNum}
               prefix={<BarChartOutlined />}
@@ -111,6 +112,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
               }}
             >
               <Statistic
+                loading={statisticLoading}
                 title="今日报警次数"
                 value={statisticNumber?.alarmNum}
                 prefix={<BarChartOutlined />}

@@ -14,13 +14,13 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const [serverId] = useState<string>(query ? query.serverId : '');
   const [loading, setLoading] = useState<boolean>(true);
   const [tokLoading, setTokLoading] = useState<boolean>(true);
+  const [statisticLoading, setStatisticLoading] = useState<boolean>(true);
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
   const [jobTok, setJobTok] = useState<API.TokChart[]>([]);
   const [chartData, setChartData] = useState<API.AnalysisChart[]>([]);
   const [selectDate, setSelectDate] = useState<API.TimeType>('today');
 
   const onFetchJobTokData = useCallback(async () => {
-    setTokLoading(true);
     const count = getTopCount(selectDate);
     fetchJobTok({ appId, serverId, count })
       .then((res) => {
@@ -41,14 +41,13 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
           if (res) setStatisticNumber(res);
         })
         .catch()
-        .finally(() => setLoading(false));
+        .finally(() => setStatisticLoading(false));
     };
     getAnalysisNumber();
   }, [appId, serverId]);
 
   useEffect(() => {
     const getAnalysisChart = () => {
-      setLoading(true);
       fetchAnalysisChart({ appId, serverId })
         .then((res: any) => {
           if (res) {
@@ -67,6 +66,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="CPU信息"
               value={statisticNumber?.cpuInfo  || '-'}
               prefix={<DashboardOutlined />}
@@ -77,6 +77,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="内存信息"
               value={statisticNumber?.memoryInfo || '-'}
               prefix={<BarChartOutlined />}
@@ -87,6 +88,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="磁盘信息"
               value={statisticNumber?.diskInfo || '-'}
               valueStyle={{fontSize: '20px'}}
@@ -96,6 +98,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="运行时长"
               value={statisticNumber?.liveTime || '-'}
               valueStyle={{fontSize: '20px'}}
@@ -108,6 +111,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="运行状态"
               prefix={<BarChartOutlined />}
               value={statisticNumber?.status === 'ON_LINE' ? '运行中' : '已下线'}

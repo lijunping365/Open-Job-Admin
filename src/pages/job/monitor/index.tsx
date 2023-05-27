@@ -14,6 +14,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const [appId] = useState<number>(query ? query.appId : 1);
   const [jobId] = useState<number>(query ? query.jobId : 1);
   const [loading, setLoading] = useState<boolean>(true);
+  const [statisticLoading, setStatisticLoading] = useState<boolean>(true);
   const [tokLoading, setTokLoading] = useState<boolean>(true);
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
   const [instanceTok, setInstanceTok] = useState<API.TokChart[]>([]);
@@ -21,7 +22,6 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const [chartData, setChartData] = useState<API.AnalysisChart[]>([]);
 
   const onFetchInstanceTokData = useCallback(async () => {
-    setTokLoading(true);
     const count = getTopCount(selectDate);
     fetchInstanceTok({ appId, jobId, count })
       .then((res) => {
@@ -42,14 +42,13 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
           if (res) setStatisticNumber(res);
         })
         .catch()
-        .finally(() => setLoading(false));
+        .finally(() => setStatisticLoading(false));
     };
     getAnalysisNumber();
   }, [appId]);
 
   useEffect(() => {
     const getAnalysisChart = () => {
-      setLoading(true);
       fetchAnalysisChart({ appId, jobId })
         .then((res: any) => {
           if (res) {
@@ -68,6 +67,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="最近一次执行时间"
               value={statisticNumber?.lastRunTime || ''}
               prefix={<DashboardOutlined />}
@@ -78,6 +78,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="任务最近启动时间"
               value={statisticNumber?.stateChangeTime || ''}
               prefix={<BarChartOutlined />}
@@ -88,6 +89,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
         <Col span={6}>
           <Card>
             <Statistic
+              loading={statisticLoading}
               title="任务状态"
               value={statisticNumber?.status === '1'? "运行中" : "已停止" || ''}
               prefix={<BarChartOutlined />}
@@ -106,6 +108,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
               }}
             >
               <Statistic
+                loading={statisticLoading}
                 title="今日报警次数"
                 value={statisticNumber?.alarmNum}
                 prefix={<BarChartOutlined />}
