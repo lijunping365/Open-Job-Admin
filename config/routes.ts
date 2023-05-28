@@ -12,12 +12,24 @@
     icon: 'smile',
     component: './Welcome',
   },
-
+  {
+    name: 'dashboard',
+    icon: 'table',
+    path: '/dashboard',
+    component: './dashboard',
+  },
   {
     name: 'app',
     icon: 'table',
     path: '/app',
     component: './app',
+  },
+  {
+    name: 'appMonitor',
+    icon: 'table',
+    path: '/app/monitor',
+    component: './app/monitor',
+    hideInMenu: true,
   },
   {
     name: 'job',
@@ -26,17 +38,23 @@
     component: './job',
   },
   {
+    name: 'jobMonitor',
+    icon: 'table',
+    path: '/job/monitor',
+    component: './job/monitor',
+    hideInMenu: true,
+  },
+  {
+    name: 'alarm',
+    icon: 'table',
+    path: '/alarm',
+    component: './alarm',
+  },
+  {
     name: 'user',
     icon: 'table',
     path: '/user',
     component: './user',
-  },
-  {
-    name: 'dashboard',
-    icon: 'table',
-    path: '/dashboard',
-    component: './dashboard',
-    hideInMenu: true,
   },
   {
     name: 'logger',
@@ -50,6 +68,13 @@
     icon: 'table',
     path: '/executor',
     component: './executor',
+    hideInMenu: true,
+  },
+  {
+    name: 'executorMonitor',
+    icon: 'table',
+    path: '/executor/monitor',
+    component: './executor/monitor',
     hideInMenu: true,
   },
   {

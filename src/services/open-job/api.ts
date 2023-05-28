@@ -163,6 +163,33 @@ export async function removeTaskLog(params: { ids: number[] }) {
   });
 }
 
+export async function fetchAlarmRecordPage(params: {
+  /** 当前的页码 */
+  current?: number;
+  /** 页面的容量 */
+  pageSize?: number;
+  /** 应用id */
+  appId?: number;
+  /** 任务id */
+  jobId?: number;
+  /** 报警时间 */
+  createTime?: Date;
+}) {
+  return request('/alarm/page', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function removeAlarmRecord(params: { ids: number[] }) {
+  return request('/alarm/delete', {
+    method: 'DELETE',
+    data: { ...params },
+  });
+}
+
 export async function fetchScheduleTaskPage(params: {
   // query
   /** 当前的页码 */
@@ -230,8 +257,14 @@ export async function nextTriggerTime(cronExpress: string) {
   });
 }
 
-export async function fetchSpiderNumber(appId: number) {
+export async function fetchAnalysisNumber() {
   return request('/analysis/statistic', {
+    method: 'GET',
+  });
+}
+
+export async function fetchAppAnalysisNumber(appId: number) {
+  return request('/analysis/appStatistic', {
     method: 'GET',
     params: {
       appId,
@@ -239,11 +272,49 @@ export async function fetchSpiderNumber(appId: number) {
   });
 }
 
-export async function fetchSpiderReport(appId: number) {
-  return request('/analysis/chart', {
+export async function fetchJobAnalysisNumber(appId: number, jobId: number) {
+  return request('/analysis/jobStatistic', {
     method: 'GET',
     params: {
       appId,
+      jobId
+    },
+  });
+}
+
+export async function fetchInstanceAnalysisNumber(appId: number, serverId: string ) {
+  return request('/analysis/instanceStatistic', {
+    method: 'GET',
+    params: {
+      appId,
+      serverId,
+    },
+  });
+}
+
+export async function fetchAnalysisChart(params: API.ChartParam) {
+  return request('/analysis/chart', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function fetchJobTok(params: API.JobTokParam) {
+  return request('/analysis/jobTok', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function fetchInstanceTok(params: API.InstanceTokParam) {
+  return request('/analysis/instanceTok', {
+    method: 'GET',
+    params: {
+      ...params,
     },
   });
 }

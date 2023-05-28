@@ -22,16 +22,31 @@ declare namespace API {
   };
 
   type StatisticNumber = {
+    appNum: number;
+    alarmNum: number;
+    status: string;
     taskTotalNum: number;
     taskRunningNum: number;
     executorTotalNum: number;
     executorOnlineNum: number;
+    lastRunTime: string;
+    stateChangeTime: string;
+    liveTime: string;
+    cpuInfo: string;
+    memoryInfo: string;
+    diskInfo: string;
   };
 
-  type StatisticReport = {
+  type AnalysisChart = {
     date: Date;
     name: string;
     value: number;
+  };
+
+  type TokChart = {
+    key: string;
+    totalCount: number;
+    successCount: number;
   };
 
   type OpenJobLog = {
@@ -50,6 +65,16 @@ declare namespace API {
     appDesc: string;
     createTime: Date;
     createUser: number;
+  };
+
+  type OpenJobAlarm = {
+    id: number;
+    appId: number;
+    jobId: number;
+    serverId: string;
+    message: string;
+    receiver: number;
+    createTime: Date;
   };
 
   type OpenJob = {
@@ -149,4 +174,27 @@ declare namespace API {
     description?: string;
     type?: NoticeIconItemType;
   };
+
+  type ChartParam = {
+    appId: number;
+    jobId?: number;
+    serverId?: string;
+    count?: number;
+  };
+
+  type JobTokParam = {
+    appId: number;
+    serverId?: string;
+    count?: number;
+    top?: number;
+  };
+
+  type InstanceTokParam = {
+    appId: number;
+    jobId?: number;
+    count?: number;
+    top?: number;
+  };
+
+  type TimeType = 'today' | 'week' | 'month' | 'year';
 }

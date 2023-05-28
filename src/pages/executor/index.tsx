@@ -7,6 +7,7 @@ import UpdateForm from './components/UpdateForm';
 import { confirmModal } from '@/components/ConfirmModel';
 import { fetchInstancePage, updateInstance, offline, online } from '@/services/open-job/api';
 import type { RouteChildrenProps } from 'react-router';
+import { Link } from '@umijs/preset-dumi/lib/theme';
 
 /**
  * 更新节点
@@ -77,7 +78,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       tooltip: '唯一标识',
     },
     {
-      title: '上线时间',
+      title: '最近上线时间',
       dataIndex: 'onlineTime',
       valueType: 'dateTime',
     },
@@ -146,6 +147,17 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
           >
             修改权重
           </a>
+          <Divider type="vertical" />
+          <Link
+            to={{
+              pathname: '/executor/monitor',
+              search: `?appId=${appId}&serverId=${record.serverId}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
+            }}
+          >
+            服务监控
+          </Link>
         </>
       ),
     },
