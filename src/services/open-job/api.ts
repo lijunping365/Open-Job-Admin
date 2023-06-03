@@ -277,12 +277,12 @@ export async function fetchJobAnalysisNumber(appId: number, jobId: number) {
     method: 'GET',
     params: {
       appId,
-      jobId
+      jobId,
     },
   });
 }
 
-export async function fetchInstanceAnalysisNumber(appId: number, serverId: string ) {
+export async function fetchInstanceAnalysisNumber(appId: number, serverId: string) {
   return request('/analysis/instanceStatistic', {
     method: 'GET',
     params: {
@@ -294,6 +294,15 @@ export async function fetchInstanceAnalysisNumber(appId: number, serverId: strin
 
 export async function fetchAnalysisChart(params: API.ChartParam) {
   return request('/analysis/chart', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+  });
+}
+
+export async function fetchJobTimeChart(params: API.JobChartParam) {
+  return request('/analysis/jobChart', {
     method: 'GET',
     params: {
       ...params,

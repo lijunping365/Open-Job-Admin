@@ -5,6 +5,7 @@ import {
   fetchJobAnalysisNumber,
   fetchInstanceTok,
   fetchAnalysisChart,
+  fetchJobTimeChart,
 } from '@/services/open-job/api';
 import type { RouteChildrenProps } from 'react-router';
 import { BarChartOutlined, DashboardOutlined } from '@ant-design/icons';
@@ -21,10 +22,12 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [statisticLoading, setStatisticLoading] = useState<boolean>(true);
   const [tokLoading, setTokLoading] = useState<boolean>(true);
+  const [jobLoading, setJobLoading] = useState<boolean>(true);
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
   const [instanceTok, setInstanceTok] = useState<API.TokChart[]>([]);
   const [selectDate, setSelectDate] = useState<API.TimeType>('today');
   const [chartData, setChartData] = useState<API.AnalysisChart[]>([]);
+  const [jobChartData, setJobChartData] = useState<API.JobTimeChart>();
 
   const onFetchInstanceTokData = useCallback(async () => {
     const count = getTopCount(selectDate);
@@ -38,6 +41,19 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
   useEffect(() => {
     onFetchInstanceTokData().then();
+  }, [appId, jobId, selectDate]);
+
+  const onFetchJobChartData = useCallback(async () => {
+    fetchJobTimeChart({ appId, jobId, period: 4 })
+      .then((res) => {
+        if (res) setJobChartData(res);
+      })
+      .catch()
+      .finally(() => setJobLoading(false));
+  }, [appId, jobId, selectDate]);
+
+  useEffect(() => {
+    onFetchJobChartData().then();
   }, [appId, jobId, selectDate]);
 
   useEffect(() => {
@@ -125,7 +141,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
       <ChartCard loading={loading} chartData={chartData} />
 
-      <TimeChartCard loading={loading} chartData={chartData} />
+      <TimeChartCard loading={jobLoading} chartData={jobChartData} />
 
       <TopCard
         title={'节点执行任务次数排行榜TOP10'}

@@ -43,6 +43,19 @@ declare namespace API {
     value: number;
   };
 
+  type JobTimeChart = {
+    startDate: string;
+    endDate: string;
+    value: number;
+    charts: JobChart[];
+  };
+
+  type JobChart = {
+    key: string;
+    date: string;
+    value: number;
+  };
+
   type TokChart = {
     key: string;
     totalCount: number;
@@ -183,6 +196,13 @@ declare namespace API {
     jobId?: number;
     serverId?: string;
     count?: number;
+  };
+
+  type JobChartParam = {
+    appId: number;
+    jobId?: number;
+    count?: number;
+    period?: number;
   };
 
   type JobTokParam = {

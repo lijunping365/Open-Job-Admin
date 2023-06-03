@@ -6,31 +6,11 @@ const { Line } = Guide;
 
 interface ChartCardProps {
   loading: boolean;
-  chartData: API.AnalysisChart[];
+  chartData?: API.JobTimeChart;
 }
 
-const data = {
-  keywordTrend: [
-    { a: '白超', dates: '00:39:29', first: 2647 },
-    { a: '白超', dates: '13:57:24', first: 2156 },
-    { a: '白超', dates: '19:40:08', first: 2166 },
-    { a: '白超', dates: '20:59:11', first: 2956 },
-    { a: '白超', dates: '18:06:55', first: 2771 },
-  ],
-  avgSpreadScore: [
-    {
-      key: '白超',
-      value: 2500,
-      startDate: '00:39:29',
-      endDate: '18:06:55',
-    },
-  ],
-};
-
 export const TimeChartCard = ({ loading, chartData }: ChartCardProps) => {
-  const { keywordTrend, avgSpreadScore } = data;
-
-  const colors = ['#1890ff', '#2fc25b'];
+  const colors = '#1890ff';
 
   return (
     <Card
@@ -42,39 +22,37 @@ export const TimeChartCard = ({ loading, chartData }: ChartCardProps) => {
         marginTop: '20px',
       }}
     >
-      <Chart height={400} data={keywordTrend} padding={[10, 20, 50, 40]} autoFit>
+      <Chart height={400} data={chartData?.charts} padding={[10, 20, 50, 40]} autoFit>
         <Tooltip shared={true} showCrosshairs />
-        <Axis name="dates" />
-        <Axis name="first" />
+        <Axis name="date" />
+        <Axis name="value" />
         {/*shape="smooth" 可配置为曲线，不设置为折线*/}
-        <Geom type="line" shape="smooth" position="dates*first" size={1} color={['a', colors]} />
-        <Geom type="point" position="dates*first" size={2} color={['a', colors]} />
+        <Geom type="line" shape="smooth" position="date*value" size={1} color={['key', colors]} />
+        <Geom type="point" position="date*value" size={2} color={['key', colors]} />
         {/*<Geom/> 和 <Guide/> 是独立控制的，可以通过chart filter来建立交互联动*/}
-        <Guide>
-          {avgSpreadScore.map((item, index) => {
-            return (
-              <Line
-                top
-                start={{ dates: item.startDate, first: item.value }}
-                end={{ dates: item.endDate, first: item.value }}
-                style={{
-                  lineWidth: 2,
-                  // 手动维护颜色
-                  stroke: colors[index],
-                }}
-                /** 调整位置 */
-                text={{
-                  position: 'end',
-                  style: {
-                    fill: colors[index],
-                  },
-                  offsetX: -420,
-                  content: `均值${item.key}`,
-                }}
-              />
-            );
-          })}
-        </Guide>
+        {chartData && (
+          <Guide>
+            <Line
+              top
+              start={{ date: chartData.startDate, value: chartData.value }}
+              end={{ date: chartData.endDate, value: chartData.value }}
+              style={{
+                lineWidth: 2,
+                // 手动维护颜色
+                stroke: colors,
+              }}
+              /** 调整位置 */
+              text={{
+                position: 'end',
+                style: {
+                  fill: colors,
+                },
+                offsetX: -420,
+                content: `任务平均耗时`,
+              }}
+            />
+          </Guide>
+        )}
       </Chart>
     </Card>
   );
