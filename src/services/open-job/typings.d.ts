@@ -30,7 +30,7 @@ declare namespace API {
     executorTotalNum: number;
     executorOnlineNum: number;
     lastRunTime: string;
-    stateChangeTime: string;
+    taskTakeTime: string;
     liveTime: string;
     cpuInfo: string;
     memoryInfo: string;
@@ -57,6 +57,9 @@ declare namespace API {
     cause: string;
     serverId: string;
     createTime: Date;
+    startTime: Date;
+    finishTime: Date;
+    takeTime: number;
   };
 
   type OpenJobApp = {
