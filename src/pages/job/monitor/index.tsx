@@ -46,7 +46,16 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const onFetchJobChartData = useCallback(async () => {
     fetchJobTimeChart({ appId, jobId, period: 4 })
       .then((res) => {
-        if (res) setJobChartData(res);
+        if (res) {
+          res.value = Number(res.value);
+          let charts = res.charts;
+          if (charts){
+            charts.forEach((e: any)=>{
+              e.value = Number(e.value)
+            })
+          }
+          setJobChartData(res);
+        }
       })
       .catch()
       .finally(() => setJobLoading(false));
@@ -103,6 +112,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
               title="上一次执行耗时"
               value={statisticNumber?.taskTakeTime || ''}
               prefix={<BarChartOutlined />}
+              suffix={'ms'}
               valueStyle={{ fontSize: '20px' }}
             />
           </Card>
@@ -141,7 +151,12 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
       <ChartCard loading={loading} chartData={chartData} />
 
-      <TimeChartCard loading={jobLoading} chartData={jobChartData} />
+      <TimeChartCard
+        loading={jobLoading}
+        chartData={jobChartData}
+        selectDate={selectDate}
+        onChange={(value) => setSelectDate(value)}
+      />
 
       <TopCard
         title={'节点执行任务次数排行榜TOP10'}
