@@ -1,13 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import {Card, Col, message, Row, Statistic} from 'antd';
-import {fetchJobAnalysisNumber, fetchInstanceTok, fetchAnalysisChart} from '@/services/open-job/api';
+import { Card, Col, message, Row, Statistic } from 'antd';
+import {
+  fetchJobAnalysisNumber,
+  fetchInstanceTok,
+  fetchAnalysisChart,
+  fetchJobTimeChart,
+} from '@/services/open-job/api';
 import type { RouteChildrenProps } from 'react-router';
 import { BarChartOutlined, DashboardOutlined } from '@ant-design/icons';
 import { ChartCard } from '@/components/ChartCard';
 import { TopCard } from '@/components/TopCard';
-import {getTopCount, handlerChartData, handlerTokData} from '@/utils/utils';
-import {Link} from "@umijs/preset-dumi/lib/theme";
+import { getTopCount, handlerChartData, handlerTokData } from '@/utils/utils';
+import { Link } from '@umijs/preset-dumi/lib/theme';
+import { TimeChartCard } from '@/components/TimeChartCard';
 
 const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const { query }: any = location;
@@ -16,10 +22,12 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [statisticLoading, setStatisticLoading] = useState<boolean>(true);
   const [tokLoading, setTokLoading] = useState<boolean>(true);
+  const [jobLoading, setJobLoading] = useState<boolean>(true);
   const [statisticNumber, setStatisticNumber] = useState<API.StatisticNumber>();
   const [instanceTok, setInstanceTok] = useState<API.TokChart[]>([]);
   const [selectDate, setSelectDate] = useState<API.TimeType>('today');
   const [chartData, setChartData] = useState<API.AnalysisChart[]>([]);
+  const [jobChartData, setJobChartData] = useState<API.JobTimeChart>();
 
   const onFetchInstanceTokData = useCallback(async () => {
     const count = getTopCount(selectDate);
@@ -33,6 +41,28 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
 
   useEffect(() => {
     onFetchInstanceTokData().then();
+  }, [appId, jobId, selectDate]);
+
+  const onFetchJobChartData = useCallback(async () => {
+    fetchJobTimeChart({ appId, jobId, period: 4 })
+      .then((res) => {
+        if (res) {
+          res.value = Number(res.value);
+          let charts = res.charts;
+          if (charts){
+            charts.forEach((e: any)=>{
+              e.value = Number(e.value)
+            })
+          }
+          setJobChartData(res);
+        }
+      })
+      .catch()
+      .finally(() => setJobLoading(false));
+  }, [appId, jobId, selectDate]);
+
+  useEffect(() => {
+    onFetchJobChartData().then();
   }, [appId, jobId, selectDate]);
 
   useEffect(() => {
@@ -68,10 +98,10 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
           <Card>
             <Statistic
               loading={statisticLoading}
-              title="最近一次执行时间"
+              title="上一次执行时间"
               value={statisticNumber?.lastRunTime || ''}
               prefix={<DashboardOutlined />}
-              valueStyle={{fontSize: '20px'}}
+              valueStyle={{ fontSize: '20px' }}
             />
           </Card>
         </Col>
@@ -79,10 +109,11 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
           <Card>
             <Statistic
               loading={statisticLoading}
-              title="任务最近启动时间"
-              value={statisticNumber?.stateChangeTime || ''}
+              title="上一次执行耗时"
+              value={statisticNumber?.taskTakeTime || ''}
               prefix={<BarChartOutlined />}
-              valueStyle={{fontSize: '20px'}}
+              suffix={'ms'}
+              valueStyle={{ fontSize: '20px' }}
             />
           </Card>
         </Col>
@@ -91,9 +122,9 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
             <Statistic
               loading={statisticLoading}
               title="任务状态"
-              value={statisticNumber?.status === '1'? "运行中" : "已停止" || ''}
+              value={statisticNumber?.status === '1' ? '运行中' : '已停止' || ''}
               prefix={<BarChartOutlined />}
-              valueStyle={{fontSize: '20px'}}
+              valueStyle={{ fontSize: '20px' }}
             />
           </Card>
         </Col>
@@ -119,6 +150,13 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       </Row>
 
       <ChartCard loading={loading} chartData={chartData} />
+
+      <TimeChartCard
+        loading={jobLoading}
+        chartData={jobChartData}
+        selectDate={selectDate}
+        onChange={(value) => setSelectDate(value)}
+      />
 
       <TopCard
         title={'节点执行任务次数排行榜TOP10'}
