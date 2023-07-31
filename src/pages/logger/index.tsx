@@ -5,7 +5,7 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import { fetchTaskLogPage, removeTaskLog } from '@/services/open-job/api';
+import {fetchTaskLogPage, killScheduleTask, removeTaskLog} from '@/services/open-job/api';
 import { confirmModal } from '@/components/ConfirmModel';
 import type { RouteChildrenProps } from 'react-router';
 
@@ -25,6 +25,27 @@ const handleRemove = async (selectedRows: any[]) => {
   } catch (error) {
     hide();
     message.error('删除失败，请重试');
+    return false;
+  }
+};
+
+/**
+ * 启动任务
+ *
+ * @param jobId
+ */
+const handleKillTask = async (jobId: number) => {
+  const hide = message.loading('正在杀死任务');
+  if (!jobId) return true;
+  try {
+    const res = await killScheduleTask(jobId);
+    console.log('ddddddddddddd', res)
+    hide();
+    message.success('杀死成功，即将刷新');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('杀死失败，请重试');
     return false;
   }
 };
@@ -113,6 +134,27 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
             }}
           >
             查看详情
+          </a>
+          <Divider type="vertical" />
+          <a
+            onClick={() => {
+              setShowDetail(true);
+              setCurrentRow(record);
+            }}
+          >
+            查看日志
+          </a>
+          <Divider type="vertical" />
+          <a
+            onClick={async () => {
+              const confirm = await confirmModal();
+              if (confirm) {
+                await handleKillTask(jobId);
+                actionRef.current?.reloadAndRest?.();
+              }
+            }}
+          >
+            杀死
           </a>
           <Divider type="vertical" />
           <a

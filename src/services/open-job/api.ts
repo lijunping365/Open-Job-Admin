@@ -248,6 +248,12 @@ export async function runScheduleTask(id: number) {
   });
 }
 
+export async function killScheduleTask(id: number) {
+  return request(`/task/kill/${id}`, {
+    method: 'PUT',
+  });
+}
+
 export async function nextTriggerTime(cronExpress: string) {
   return request(`/task/nextTriggerTime`, {
     method: 'GET',
