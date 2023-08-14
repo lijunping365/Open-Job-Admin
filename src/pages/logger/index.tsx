@@ -30,15 +30,15 @@ const handleRemove = async (selectedRows: any[]) => {
 };
 
 /**
- * 启动任务
+ * 杀死任务
  *
- * @param jobId
+ * @param logId
  */
-const handleKillTask = async (jobId: number) => {
+const handleKillTask = async (logId: number) => {
   const hide = message.loading('正在杀死任务');
-  if (!jobId) return true;
+  if (!logId) return true;
   try {
-    const res = await killScheduleTask(jobId);
+    const res = await killScheduleTask(logId);
     console.log('ddddddddddddd', res)
     hide();
     message.success('杀死成功，即将刷新');
@@ -149,7 +149,7 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
             onClick={async () => {
               const confirm = await confirmModal();
               if (confirm) {
-                await handleKillTask(jobId);
+                await handleKillTask(record.id);
                 actionRef.current?.reloadAndRest?.();
               }
             }}

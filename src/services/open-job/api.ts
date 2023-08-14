@@ -163,6 +163,12 @@ export async function removeTaskLog(params: { ids: number[] }) {
   });
 }
 
+export async function killScheduleTask(id: number) {
+  return request(`/logger/killTask/${id}`, {
+    method: 'PUT',
+  });
+}
+
 export async function fetchAlarmRecordPage(params: {
   /** 当前的页码 */
   current?: number;
@@ -244,12 +250,6 @@ export async function stopScheduleTask(id: number) {
 
 export async function runScheduleTask(id: number) {
   return request(`/task/run/${id}`, {
-    method: 'PUT',
-  });
-}
-
-export async function killScheduleTask(id: number) {
-  return request(`/task/kill/${id}`, {
     method: 'PUT',
   });
 }
