@@ -79,8 +79,9 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       title: '调度结果',
       dataIndex: 'status',
       valueEnum: {
-        0: { text: '执行失败', status: 'Error' },
+        0: { text: '执行中', status: 'Processing' },
         1: { text: '执行成功', status: 'Success' },
+        2: { text: '执行失败', status: 'Error' },
       },
     },
     {
