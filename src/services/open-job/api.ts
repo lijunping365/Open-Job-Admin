@@ -169,6 +169,12 @@ export async function killScheduleTask(id: number) {
   });
 }
 
+export async function catTaskLog(id: number, fromLineNum: number) {
+  return request(`/logger/catLog/${id}?fromLineNum=${fromLineNum}`, {
+    method: 'GET',
+  });
+}
+
 export async function fetchAlarmRecordPage(params: {
   /** 当前的页码 */
   current?: number;

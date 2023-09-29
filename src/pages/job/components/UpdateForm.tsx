@@ -63,8 +63,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       message.error("cron 表达式不能为空");
       return;
     }
-    const result = await validateCronExpress(cronExpressValue);
-    if(!result){
+
+    try {
+      await validateCronExpress(cronExpressValue);
+    }catch (e) {
+      message.error("cron 表达式不合法：" + e);
       return;
     }
 

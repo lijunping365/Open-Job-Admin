@@ -8,6 +8,7 @@ import ProDescriptions from '@ant-design/pro-descriptions';
 import {fetchTaskLogPage, killScheduleTask, removeTaskLog} from '@/services/open-job/api';
 import { confirmModal } from '@/components/ConfirmModel';
 import type { RouteChildrenProps } from 'react-router';
+import {Link} from "@umijs/preset-dumi/lib/theme";
 
 /**
  * 删除节点
@@ -137,14 +138,16 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
             查看详情
           </a>
           <Divider type="vertical" />
-          <a
-            onClick={() => {
-              setShowDetail(true);
-              setCurrentRow(record);
+          <Link
+            to={{
+              pathname: '/logger/rolling',
+              search: `?logId=${record.id}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
             }}
           >
             查看日志
-          </a>
+          </Link>
           <Divider type="vertical" />
           <a
             onClick={async () => {
