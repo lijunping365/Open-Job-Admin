@@ -211,13 +211,24 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         <Row>
           <Col span={12}>
             <FormItem
+              name="timeout"
+              label="超时时间(s)"
+            >
+              <Input type='number' placeholder="请输入任务执行超时时间" />
+            </FormItem>
+          </Col>
+
+          <Col span={12}>
+            <FormItem
               name="params"
               label="任务参数"
             >
               <TextArea rows={4}  placeholder="请输入任务参数" />
             </FormItem>
           </Col>
+        </Row>
 
+        <Row>
           <Col span={12}>
             <FormItem
               name="script"
