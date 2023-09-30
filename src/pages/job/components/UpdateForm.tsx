@@ -115,6 +115,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           jobName: values.jobName,
           handlerName: values.handlerName,
           routeStrategy: values.routeStrategy,
+          executorTimeout: values.executorTimeout,
           shardingNodes: values.shardingNodes ? values.shardingNodes.split(",") : [],
           params: values.params,
           script: values.script,
@@ -211,7 +212,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         <Row>
           <Col span={12}>
             <FormItem
-              name="timeout"
+              name="executorTimeout"
               label="超时时间(s)"
             >
               <Input type='number' placeholder="请输入任务执行超时时间" />

@@ -101,7 +101,7 @@ declare namespace API {
     cronExpression: string;
     shardingNodes: string;
     routeStrategy: number;
-    timeout: number;
+    executorTimeout: number;
     params: string;
     script: string;
     status: number;
