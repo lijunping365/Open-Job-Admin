@@ -64,6 +64,13 @@
     hideInMenu: true,
   },
   {
+    name: 'rollingLog',
+    icon: 'table',
+    path: '/logger/rolling',
+    component: './logger/rolling',
+    hideInMenu: true,
+  },
+  {
     name: 'executor',
     icon: 'table',
     path: '/executor',

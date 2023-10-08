@@ -12,6 +12,7 @@ export default {
   'menu.executor': '执行器管理',
   'menu.executorMonitor': '执行器监控',
   'menu.logger': '任务日志',
+  'menu.rollingLog': '实时日志',
   'menu.basic': '用户管理',
   'menu.register': '注册',
   'menu.profile': '详情页',

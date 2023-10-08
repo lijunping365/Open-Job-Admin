@@ -5,9 +5,10 @@ import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
-import { fetchTaskLogPage, removeTaskLog } from '@/services/open-job/api';
+import {fetchTaskLogPage, killScheduleTask, removeTaskLog} from '@/services/open-job/api';
 import { confirmModal } from '@/components/ConfirmModel';
 import type { RouteChildrenProps } from 'react-router';
+import {Link} from "@umijs/preset-dumi/lib/theme";
 
 /**
  * 删除节点
@@ -25,6 +26,27 @@ const handleRemove = async (selectedRows: any[]) => {
   } catch (error) {
     hide();
     message.error('删除失败，请重试');
+    return false;
+  }
+};
+
+/**
+ * 杀死任务
+ *
+ * @param logId
+ */
+const handleKillTask = async (logId: number) => {
+  const hide = message.loading('正在杀死任务');
+  if (!logId) return true;
+  try {
+    const res = await killScheduleTask(logId);
+    console.log('ddddddddddddd', res)
+    hide();
+    message.success('杀死成功，即将刷新');
+    return true;
+  } catch (error) {
+    hide();
+    message.error('杀死失败，请重试');
     return false;
   }
 };
@@ -58,8 +80,9 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
       title: '调度结果',
       dataIndex: 'status',
       valueEnum: {
-        0: { text: '执行失败', status: 'Error' },
+        0: { text: '执行中', status: 'Processing' },
         1: { text: '执行成功', status: 'Success' },
+        2: { text: '执行失败', status: 'Error' },
       },
     },
     {
@@ -113,6 +136,29 @@ const TableList: React.FC<RouteChildrenProps> = ({ location }) => {
             }}
           >
             查看详情
+          </a>
+          <Divider type="vertical" />
+          <Link
+            to={{
+              pathname: '/logger/rolling',
+              search: `?logId=${record.id}`,
+              hash: '#the-hash',
+              state: { fromDashboard: true },
+            }}
+          >
+            查看日志
+          </Link>
+          <Divider type="vertical" />
+          <a
+            onClick={async () => {
+              const confirm = await confirmModal();
+              if (confirm) {
+                await handleKillTask(record.id);
+                actionRef.current?.reloadAndRest?.();
+              }
+            }}
+          >
+            杀死
           </a>
           <Divider type="vertical" />
           <a

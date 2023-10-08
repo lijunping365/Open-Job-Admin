@@ -60,8 +60,10 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
       message.error("cron 表达式不能为空");
       return;
     }
-    const result = await validateCronExpress(cronExpressValue);
-    if(!result){
+    try {
+      await validateCronExpress(cronExpressValue);
+    }catch (e) {
+      message.error("cron 表达式不合法：" + e);
       return;
     }
 
@@ -195,13 +197,23 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
         <Row>
           <Col span={12}>
             <FormItem
+              name="executorTimeout"
+              label="超时时间(s)"
+            >
+              <Input type='number' placeholder="请输入任务执行超时时间" />
+            </FormItem>
+          </Col>
+          <Col span={12}>
+            <FormItem
               name="params"
               label="任务参数"
             >
               <TextArea rows={4}  placeholder="请输入任务参数" />
             </FormItem>
           </Col>
+        </Row>
 
+        <Row>
           <Col span={12}>
             <FormItem
               name="script"
