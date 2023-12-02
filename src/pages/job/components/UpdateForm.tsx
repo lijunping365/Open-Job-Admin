@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {Form, Button, Input, Modal, Row, Col, message, Select} from 'antd';
 import CronModal from "@/components/CronModel";
-import {fetchAllInstance, fetchOpenJobAppList, validateCronExpress} from "@/services/open-job/api";
+import {fetchAllInstance, fetchAllJobHandler, fetchOpenJobAppList, validateCronExpress} from "@/services/open-job/api";
 
 export interface UpdateFormProps {
   onCancel: (flag?: boolean, formVals?: Partial<API.OpenJob>) => void;
@@ -32,6 +32,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   const [cronExpressValue, setCronExpressValue] = useState<any>(values.cronExpression);
   const [openJobAppOptions, setOpenJobAppOptions] = useState<React.ReactNode[]>([]);
   const [openJobNodeOptions, setOpenJobNodeOptions] = useState<React.ReactNode[]>([]);
+  const [openJobHandlerOptions, setOpenJobHandlerOptions] = useState<React.ReactNode[]>([]);
 
   const onFetchOpenJobAppList = useCallback(async () => {
     const result: API.OpenJobApp[] = await fetchOpenJobAppList();
@@ -48,12 +49,19 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
   },[]);
 
   const handleSelectApp = async (op: any) => {
-    const result: API.Instance[] = await fetchAllInstance(op);
-    if (result){
-      const options = result.map(instance=>{
+    const instances: API.Instance[] = await fetchAllInstance(op);
+    const jobHandlers: API.JobHandler[] = await fetchAllJobHandler(op);
+    if (instances){
+      const options = instances.map(instance=>{
         return <Option value={instance.serverId}>{instance.serverId}</Option>
       });
       setOpenJobNodeOptions(options);
+    }
+    if (jobHandlers){
+      const options = jobHandlers.map(jobHandler=>{
+        return <Option value={jobHandler.value}>{jobHandler.name}</Option>
+      });
+      setOpenJobHandlerOptions(options);
     }
   };
 
@@ -71,17 +79,13 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       return;
     }
 
-    const {routeStrategy} =  fieldsValue;
     const {shardingNodes} =  fieldsValue;
-    if (routeStrategy === 1 && (!shardingNodes || shardingNodes.length === 0)){
-      message.error("分片执行时分片节点不能为空")
-      return;
-    }
+
     handleUpdate({
       ...values,
       ...fieldsValue,
       cronExpression: cronExpressValue,
-      shardingNodes: shardingNodes.join(",")
+      shardingNodes: shardingNodes ? shardingNodes.join(",") : '',
     });
   };
 
@@ -133,11 +137,18 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           </Col>
           <Col span={12}>
             <FormItem
-              name="handlerName"
-              label="jobHandler"
-              rules={[{ required: true, message: '请输入jobHandler！' }]}
+              name="cronExpression"
+              label="Cron 表达式"
             >
-              <Input placeholder="请输入jobHandler" />
+              <Input.Group compact style={{display: 'flex'}}>
+                <Input placeholder="请输入Cron 表达式"  value={cronExpressValue} onChange={(e)=>setCronExpressValue(e.target.value)}/>
+                <Button
+                  type="primary"
+                  onClick={() => handleCronModalVisible(true)}
+                >
+                  Cron 工具
+                </Button>
+              </Input.Group>
             </FormItem>
           </Col>
         </Row>
@@ -163,18 +174,17 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           </Col>
           <Col span={12}>
             <FormItem
-              name="cronExpression"
-              label="Cron 表达式"
+              name="handlerName"
+              label="jobHandler"
+              rules={[{ required: true, message: '请输入jobHandler！' }]}
             >
-              <Input.Group compact style={{display: 'flex'}}>
-                <Input placeholder="请输入Cron 表达式"  value={cronExpressValue} onChange={(e)=>setCronExpressValue(e.target.value)}/>
-                <Button
-                  type="primary"
-                  onClick={() => handleCronModalVisible(true)}
-                >
-                  Cron 工具
-                </Button>
-              </Input.Group>
+              <Select
+                allowClear
+                style={{ width: '100%' }}
+                placeholder="请选择节点"
+              >
+                {openJobHandlerOptions}
+              </Select>
             </FormItem>
           </Col>
         </Row>

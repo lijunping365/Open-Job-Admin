@@ -21,6 +21,11 @@ declare namespace API {
     weight: number;
   };
 
+  type JobHandler = {
+    value: string;
+    name: string;
+  };
+
   type StatisticNumber = {
     appNum: number;
     alarmNum: number;

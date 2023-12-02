@@ -116,6 +116,13 @@ export async function fetchAllInstance(appId: any) {
   });
 }
 
+export async function fetchAllJobHandler(appId: any) {
+  return request('/task/getHandlers', {
+    method: 'GET',
+    params: { appId },
+  });
+}
+
 export async function updateInstance(params: Partial<API.Instance>) {
   return request('/instance/update', {
     method: 'PUT',
